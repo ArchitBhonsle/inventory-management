@@ -33,18 +33,19 @@ let UserResolver = class UserResolver {
             return User_1.UserModel.find({ username });
         });
     }
-    createUser(username, email, password) {
+    createUser(username, email, password, department) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = new User_1.UserModel({ username, email, password });
+            const user = new User_1.UserModel({ username, email, password, department });
             try {
                 yield user.save();
-                return true;
+                return '';
             }
             catch (err) {
                 console.log(err);
                 if (err === 11000) {
+                    return 'User with same username or password already exists';
                 }
-                return false;
+                return 'Unknown error. Try again or contact admin.';
             }
         });
     }
@@ -63,16 +64,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "getUserByUsername", null);
 __decorate([
-    type_graphql_1.Mutation(() => Boolean),
+    type_graphql_1.Mutation(() => String),
     __param(0, type_graphql_1.Arg('username', () => String)),
     __param(1, type_graphql_1.Arg('email', () => String)),
     __param(2, type_graphql_1.Arg('password', () => String)),
+    __param(3, type_graphql_1.Arg('department', () => String)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "createUser", null);
 UserResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(User_1.User)
 ], UserResolver);
 exports.UserResolver = UserResolver;
 //# sourceMappingURL=user.js.map

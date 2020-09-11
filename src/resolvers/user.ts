@@ -1,7 +1,7 @@
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import { UserModel, User } from '../models/User';
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
     @Query(() => [ User ])
     users() {
@@ -16,26 +16,28 @@ export class UserResolver {
         return UserModel.find({ username });
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => String)
     async createUser(
         @Arg('username', () => String)
         username: string,
         @Arg('email', () => String)
         email: string,
         @Arg('password', () => String)
-        password: string
+        password: string,
+        @Arg('department', () => String)
+        department: string
     ) {
-        const user = new UserModel({ username, email, password });
+        const user = new UserModel({ username, email, password, department });
 
         try {
             await user.save();
-            return true;
+            return '';
         } catch (err) {
             console.log(err);
             if (err === 11000) {
-                // duplicate value for unique field
+                return 'User with same username or password already exists';
             }
-            return false;
+            return 'Unknown error. Try again or contact admin.';
         }
     }
 }

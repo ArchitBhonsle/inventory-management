@@ -3,8 +3,8 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import 'reflect-metadata';
-import { HelloResolver } from './resolvers/hello';
 import { UserResolver } from './resolvers/user';
+import { ItemResolver } from './resolvers/item';
 
 const main = async () => {
     await mongoose.connect('mongodb://localhost/inventory-management', {
@@ -18,7 +18,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [ HelloResolver, UserResolver ],
+            resolvers: [ UserResolver, ItemResolver ],
             validate: false
         })
     });
