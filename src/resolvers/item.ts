@@ -1,11 +1,14 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { MyContext } from '../utils/interfaces';
+import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
 import { Item, ItemModel } from '../models/Item';
+import { UserModel } from '../models/User';
 
 @Resolver()
 export class ItemResolver {
-    @Query(() => [ Item ])
-    items() {
-        return ItemModel.find({});
+    @Query(() => [ Item ], { nullable: true })
+    items(@Ctx() { user }: MyContext) {
+        if (user && user.isAdmin) return ItemModel.find({});
+        else return null;
     }
 
     @Query(() => [ Item ])
@@ -40,7 +43,7 @@ export class ItemResolver {
     }
 
     @Mutation(() => String)
-    createItem(
+    async createItem(
         @Arg('name', () => String)
         itemName: string,
         @Arg('category', () => String)
@@ -63,11 +66,51 @@ export class ItemResolver {
         });
 
         try {
-            item.save();
+            await item.save();
             return '';
         } catch (err) {
             console.log(err);
             return 'Error';
         }
+    }
+
+    @Mutation(() => String)
+    async transferItem(
+        @Arg('id', () => String)
+        itemId: string,
+        @Arg('username', () => String)
+        username: string
+    ) {
+        const item = await ItemModel.findById(itemId);
+        if (!item) {
+            return 'Item doesn\'t exist';
+        }
+
+        const lastUserUsername = item.history[item.history.length - 1].name;
+        await UserModel.findOneAndUpdate(
+            { username: lastUserUsername },
+            { $pull: { items: itemId } },
+            { new: true }
+        );
+
+        const user = await UserModel.findOneAndUpdate(
+            { username: username },
+            { $push: { items: itemId } },
+            { new: true }
+        );
+        if (!user) {
+            return 'User doesn\'t exist';
+        }
+
+        await ItemModel.findOneAndUpdate(
+            { _id: itemId },
+            {
+                $push: {
+                    history: { name: user.username, isDepartment: user.isAdmin }
+                }
+            }
+        );
+
+        return 'Success';
     }
 }

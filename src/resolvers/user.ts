@@ -1,8 +1,8 @@
 import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import { UserModel, User } from '../models/User';
 import argon2 from 'argon2';
-import { isEmail, isUsername } from '../utils/validations';
-import { createToken } from '../utils/createToken';
+import { isEmail, isUsername } from '../utils/validation';
+import { createToken } from '../utils/jwt';
 
 @Resolver(User)
 export class UserResolver {

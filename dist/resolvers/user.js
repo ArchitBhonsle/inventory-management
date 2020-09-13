@@ -28,8 +28,8 @@ exports.UserResolver = void 0;
 const type_graphql_1 = require("type-graphql");
 const User_1 = require("../models/User");
 const argon2_1 = __importDefault(require("argon2"));
-const validations_1 = require("../utils/validations");
-const createToken_1 = require("../utils/createToken");
+const validation_1 = require("../utils/validation");
+const jwt_1 = require("../utils/jwt");
 let UserResolver = class UserResolver {
     users() {
         return User_1.UserModel.find({});
@@ -37,12 +37,12 @@ let UserResolver = class UserResolver {
     getUser(usernameOrEmail) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = null;
-            if (validations_1.isEmail(usernameOrEmail)) {
+            if (validation_1.isEmail(usernameOrEmail)) {
                 user = yield User_1.UserModel.findOne({
                     email: usernameOrEmail
                 });
             }
-            else if (validations_1.isUsername(usernameOrEmail)) {
+            else if (validation_1.isUsername(usernameOrEmail)) {
                 user = yield User_1.UserModel.findOne({
                     username: usernameOrEmail
                 });
@@ -75,25 +75,25 @@ let UserResolver = class UserResolver {
     login(usernameOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashedPassword = yield argon2_1.default.hash(password);
-            if (validations_1.isEmail(usernameOrEmail)) {
+            if (validation_1.isEmail(usernameOrEmail)) {
                 const user = yield User_1.UserModel.findOne({
                     email: usernameOrEmail,
                     password: hashedPassword
                 });
                 if (user) {
-                    return createToken_1.createToken(user.username);
+                    return jwt_1.createToken(user.username);
                 }
                 else {
                     return 'user not found';
                 }
             }
-            else if (validations_1.isUsername(usernameOrEmail)) {
+            else if (validation_1.isUsername(usernameOrEmail)) {
                 const user = yield User_1.UserModel.findOne({
                     username: usernameOrEmail,
                     password: hashedPassword
                 });
                 if (user) {
-                    return createToken_1.createToken(user.username);
+                    return jwt_1.createToken(user.username);
                 }
                 else {
                     return 'user not found';

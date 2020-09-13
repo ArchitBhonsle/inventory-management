@@ -29,6 +29,10 @@ export class User {
     @Field()
     @prop({ required: true, default: false })
     public isAdmin: boolean;
+
+    @Field()
+    @prop({ required: true, default: false })
+    public isDepartment: boolean;
 }
 
 export const UserModel = getModelForClass(User);

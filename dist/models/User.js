@@ -48,6 +48,11 @@ __decorate([
     typegoose_1.prop({ required: true, default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typegoose_1.prop({ required: true, default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isDepartment", void 0);
 User = __decorate([
     type_graphql_1.ObjectType()
 ], User);
