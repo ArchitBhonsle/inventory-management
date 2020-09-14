@@ -16,16 +16,16 @@ let User = class User {
 };
 __decorate([
     type_graphql_1.Field(),
-    typegoose_1.prop({ lowercase: true, required: true, unique: true }),
+    typegoose_1.prop({ lowercase: true, required: true, unique: true, trim: true }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typegoose_1.prop({ lowercase: true, required: true, unique: true }),
+    typegoose_1.prop({ lowercase: true, required: true, unique: true, trim: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    typegoose_1.prop({ required: true }),
+    typegoose_1.prop({ required: true, trim: true }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 User = __decorate([

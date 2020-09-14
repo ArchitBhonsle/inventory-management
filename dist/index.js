@@ -20,22 +20,22 @@ require("reflect-metadata");
 const hello_1 = require("./resolvers/hello");
 const user_1 = require("./resolvers/user");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield mongoose_1.default.connect('mongodb://localhost/inventory-management', {
+    yield mongoose_1.default.connect("mongodb://localhost/inventory-management", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: false
+        useFindAndModify: false,
     });
     const app = express_1.default();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
             resolvers: [hello_1.HelloResolver, user_1.UserResolver],
-            validate: false
-        })
+            validate: false,
+        }),
     });
     apolloServer.applyMiddleware({ app });
     app.listen(4000, () => {
-        console.log('🚀 at http://localhost:4000/graphql');
+        console.log("🚀 at http://localhost:4000/graphql");
     });
 });
 main();
