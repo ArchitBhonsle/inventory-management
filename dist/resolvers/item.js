@@ -26,11 +26,8 @@ const type_graphql_1 = require("type-graphql");
 const Item_1 = require("../models/Item");
 const User_1 = require("../models/User");
 let ItemResolver = class ItemResolver {
-    items({ user }) {
-        if (user && user.isAdmin)
-            return Item_1.ItemModel.find({});
-        else
-            return null;
+    items() {
+        return Item_1.ItemModel.find({});
     }
     getItemsByName(itemName) {
         return Item_1.ItemModel.find({ name: itemName });
@@ -91,9 +88,8 @@ let ItemResolver = class ItemResolver {
 };
 __decorate([
     type_graphql_1.Query(() => [Item_1.Item], { nullable: true }),
-    __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ItemResolver.prototype, "items", null);
 __decorate([

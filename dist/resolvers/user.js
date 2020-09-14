@@ -30,9 +30,16 @@ const User_1 = require("../models/User");
 const argon2_1 = __importDefault(require("argon2"));
 const validation_1 = require("../utils/validation");
 const jwt_1 = require("../utils/jwt");
+const auth_1 = require("../utils/auth");
 let UserResolver = class UserResolver {
-    users() {
-        return User_1.UserModel.find({});
+    users({ username }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const authCheck = yield auth_1.isAdmin(username, []);
+            if (authCheck) {
+                return authCheck;
+            }
+            return User_1.UserModel.find({});
+        });
     }
     getUser(usernameOrEmail) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -74,29 +81,32 @@ let UserResolver = class UserResolver {
     }
     login(usernameOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const hashedPassword = yield argon2_1.default.hash(password);
             if (validation_1.isEmail(usernameOrEmail)) {
                 const user = yield User_1.UserModel.findOne({
-                    email: usernameOrEmail,
-                    password: hashedPassword
+                    email: usernameOrEmail
                 });
-                if (user) {
+                if (!user) {
+                    return 'user not found';
+                }
+                if (yield argon2_1.default.verify(user.password, password)) {
                     return jwt_1.createToken(user.username);
                 }
                 else {
-                    return 'user not found';
+                    return 'wrong passoword';
                 }
             }
             else if (validation_1.isUsername(usernameOrEmail)) {
                 const user = yield User_1.UserModel.findOne({
-                    username: usernameOrEmail,
-                    password: hashedPassword
+                    username: usernameOrEmail
                 });
-                if (user) {
+                if (!user) {
+                    return 'user not found';
+                }
+                if (yield argon2_1.default.verify(user.password, password)) {
                     return jwt_1.createToken(user.username);
                 }
                 else {
-                    return 'user not found';
+                    return 'wrong passoword';
                 }
             }
             else {
@@ -107,9 +117,10 @@ let UserResolver = class UserResolver {
 };
 __decorate([
     type_graphql_1.Query(() => [User_1.User]),
+    __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "users", null);
 __decorate([
     type_graphql_1.Query(() => User_1.User, { nullable: true }),

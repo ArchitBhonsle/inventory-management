@@ -1,14 +1,12 @@
-import { MyContext } from '../utils/interfaces';
-import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import { Item, ItemModel } from '../models/Item';
 import { UserModel } from '../models/User';
 
 @Resolver()
 export class ItemResolver {
     @Query(() => [ Item ], { nullable: true })
-    items(@Ctx() { user }: MyContext) {
-        if (user && user.isAdmin) return ItemModel.find({});
-        else return null;
+    items() {
+        return ItemModel.find({});
     }
 
     @Query(() => [ Item ])

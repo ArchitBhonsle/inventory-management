@@ -9,10 +9,9 @@ const constants_1 = require("../constants");
 function createToken(username) {
     let token = '';
     try {
-        token = jsonwebtoken_1.default.sign(username, constants_1.ACCESS_TOKEN_KEY, { expiresIn: '7d' });
+        token = jsonwebtoken_1.default.sign({ username }, constants_1.ACCESS_TOKEN_KEY, { expiresIn: '7d' });
     }
     catch (err) {
-        console.log(err);
     }
     finally {
         return token;
@@ -29,9 +28,10 @@ function getTokenFromHeader(authHeader) {
 }
 exports.getTokenFromHeader = getTokenFromHeader;
 function getUsernameFromToken(token) {
-    let username = '';
+    let username = null;
     try {
-        username = jsonwebtoken_1.default.verify(token, constants_1.ACCESS_TOKEN_KEY).toString();
+        const parsedToken = jsonwebtoken_1.default.verify(token, constants_1.ACCESS_TOKEN_KEY);
+        username = parsedToken.username;
     }
     catch (err) {
     }

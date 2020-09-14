@@ -19,7 +19,6 @@ const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const user_1 = require("./resolvers/user");
 const item_1 = require("./resolvers/item");
-const db_1 = require("./utils/db");
 const jwt_1 = require("./utils/jwt");
 const seed_1 = require("./utils/seed");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,8 +37,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         context: ({ req }) => __awaiter(void 0, void 0, void 0, function* () {
             const token = jwt_1.getTokenFromHeader(req.headers.authorization);
             const username = jwt_1.getUsernameFromToken(token);
-            const user = yield db_1.getUserByUsername(username);
-            return { user };
+            return { username };
         })
     });
     apolloServer.applyMiddleware({ app });

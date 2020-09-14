@@ -1,13 +1,19 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
 import { UserModel, User } from '../models/User';
 import argon2 from 'argon2';
 import { isEmail, isUsername } from '../utils/validation';
 import { createToken } from '../utils/jwt';
+import { MyContext } from '../utils/misc';
+import { isAdmin } from '../utils/auth';
 
 @Resolver(User)
 export class UserResolver {
     @Query(() => [ User ])
-    users() {
+    async users(@Ctx() { username }: MyContext) {
+        const authCheck = await isAdmin(username, []);
+        if (authCheck) {
+            return authCheck;
+        }
         return UserModel.find({});
     }
 
@@ -67,27 +73,29 @@ export class UserResolver {
         @Arg('password', () => String)
         password: string
     ) {
-        const hashedPassword = await argon2.hash(password);
-
         if (isEmail(usernameOrEmail)) {
             const user = await UserModel.findOne({
-                email: usernameOrEmail,
-                password: hashedPassword
+                email: usernameOrEmail
             });
-            if (user) {
+            if (!user) {
+                return 'user not found';
+            }
+            if (await argon2.verify(user.password, password)) {
                 return createToken(user.username);
             } else {
-                return 'user not found';
+                return 'wrong passoword';
             }
         } else if (isUsername(usernameOrEmail)) {
             const user = await UserModel.findOne({
-                username: usernameOrEmail,
-                password: hashedPassword
+                username: usernameOrEmail
             });
-            if (user) {
+            if (!user) {
+                return 'user not found';
+            }
+            if (await argon2.verify(user.password, password)) {
                 return createToken(user.username);
             } else {
-                return 'user not found';
+                return 'wrong passoword';
             }
         } else {
             return 'neither a username or an email';
