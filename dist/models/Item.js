@@ -9,53 +9,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = exports.User = void 0;
+exports.ItemModel = exports.Item = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 const type_graphql_1 = require("type-graphql");
 const mongoose_1 = require("mongoose");
-let User = class User {
+let HistoryEntry = class HistoryEntry {
+};
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], HistoryEntry.prototype, "name", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Boolean)
+], HistoryEntry.prototype, "isDepartment", void 0);
+HistoryEntry = __decorate([
+    type_graphql_1.ObjectType()
+], HistoryEntry);
+let Item = class Item {
 };
 __decorate([
     type_graphql_1.Field(() => String),
     __metadata("design:type", mongoose_1.Types.ObjectId)
-], User.prototype, "id", void 0);
+], Item.prototype, "id", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typegoose_1.prop({ lowercase: true, required: true, unique: true, trim: true }),
-    __metadata("design:type", String)
-], User.prototype, "username", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    typegoose_1.prop({ lowercase: true, required: true, unique: true, trim: true }),
-    __metadata("design:type", String)
-], User.prototype, "email", void 0);
-__decorate([
-    typegoose_1.prop({ required: true, trim: true }),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-__decorate([
-    type_graphql_1.Field(() => [String]),
-    typegoose_1.prop({ required: true, default: [] }),
-    __metadata("design:type", Array)
-], User.prototype, "items", void 0);
-__decorate([
-    type_graphql_1.Field(() => String),
     typegoose_1.prop({ required: true, lowercase: true, index: true }),
     __metadata("design:type", String)
-], User.prototype, "department", void 0);
+], Item.prototype, "name", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typegoose_1.prop({ required: true, default: false }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isAdmin", void 0);
+    typegoose_1.prop({
+        required: true,
+        lowercase: true,
+        default: 'unassigned',
+        index: true
+    }),
+    __metadata("design:type", String)
+], Item.prototype, "category", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typegoose_1.prop({ required: true, default: false }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isDepartment", void 0);
-User = __decorate([
+    typegoose_1.prop({ required: true, lowercase: true, index: true }),
+    __metadata("design:type", String)
+], Item.prototype, "department", void 0);
+__decorate([
+    type_graphql_1.Field(() => [HistoryEntry]),
+    typegoose_1.prop({ required: true, default: [] }),
+    __metadata("design:type", Array)
+], Item.prototype, "history", void 0);
+Item = __decorate([
     type_graphql_1.ObjectType()
-], User);
-exports.User = User;
-exports.UserModel = typegoose_1.getModelForClass(User);
-//# sourceMappingURL=User.js.map
+], Item);
+exports.Item = Item;
+exports.ItemModel = typegoose_1.getModelForClass(Item);
+//# sourceMappingURL=Item.js.map
