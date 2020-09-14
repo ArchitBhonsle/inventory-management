@@ -23,9 +23,6 @@ const Navbar = () => {
       <Button component={Link} to="/" color="inherit">
         Home
       </Button>
-      <Button component={Link} to="/signup" color="inherit">
-        Signup
-      </Button>
     </Fragment>
   );
 
