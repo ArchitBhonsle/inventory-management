@@ -4,6 +4,7 @@ import "./App.css";
 
 //pages
 import login from "./pages/login/login";
+import home from "./pages/home/home";
 
 //components
 import Navbar from "./components/Navbar/Navbar";
@@ -15,6 +16,7 @@ function App() {
         <Navbar />
         <div className="container">
           <Switch>
+            <Route exact path="/" component={home} />
             <Route exact path="/login" component={login} />
           </Switch>
         </div>
