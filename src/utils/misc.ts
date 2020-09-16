@@ -1,3 +1,3 @@
-export interface MyContext {
+export type MyContext = {
     username: string | null;
-}
+};

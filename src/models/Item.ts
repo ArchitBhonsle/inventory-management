@@ -7,6 +7,8 @@ class HistoryEntry {
     @Field() name: string;
 
     @Field() isDepartment: boolean;
+
+    @Field() timeOfTransfer: Date;
 }
 
 @ObjectType()
@@ -30,6 +32,18 @@ export class Item {
     @Field()
     @prop({ required: true, lowercase: true, index: true })
     public department: string;
+
+    @Field()
+    @prop({ required: true, lowercase: true, index: true })
+    public location: string;
+
+    @Field()
+    @prop({ required: true })
+    public description: string;
+
+    @Field()
+    @prop({ required: true })
+    public image: string;
 
     @Field(() => [ HistoryEntry ])
     @prop({ required: true, default: [] })

@@ -1,6 +1,8 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { isAdmin } from '../utils/auth';
+import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
 import { Item, ItemModel } from '../models/Item';
 import { UserModel } from '../models/User';
+import { MyContext } from '../utils/misc';
 
 @Resolver()
 export class ItemResolver {
@@ -46,9 +48,17 @@ export class ItemResolver {
         itemName: string,
         @Arg('category', () => String)
         itemCategory: string,
-        @Arg('department', () => String)
-        itemDepartment: string
+        @Arg('location', () => String)
+        itemLocation: string,
+        @Arg('description', () => String)
+        itemDescription: string,
+        @Arg('image', () => String)
+        itemImage: string,
+        @Ctx() { username }: MyContext
     ) {
+        const user = await isAdmin(username);
+        if (!user) return 'not authorized';
+
         if (itemCategory === '') {
             itemCategory = 'unassigned';
         }
@@ -56,10 +66,14 @@ export class ItemResolver {
         const item = new ItemModel({
             name: itemName,
             category: itemCategory,
-            department: itemDepartment,
+            department: user.username,
+            location: itemLocation,
+            description: itemDescription,
+            image: itemImage,
             history: {
-                name: itemDepartment,
-                isDepartment: true
+                name: user.username,
+                isDepartment: true,
+                timeOfTransfer: new Date()
             }
         });
 
@@ -68,7 +82,7 @@ export class ItemResolver {
             return '';
         } catch (err) {
             console.log(err);
-            return 'Error';
+            return 'Unknown error, please try again';
         }
     }
 
@@ -104,7 +118,11 @@ export class ItemResolver {
             { _id: itemId },
             {
                 $push: {
-                    history: { name: user.username, isDepartment: user.isAdmin }
+                    history: {
+                        name: user.username,
+                        isDepartment: user.isAdmin,
+                        timeOfTransfer: new Date()
+                    }
                 }
             }
         );

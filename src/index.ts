@@ -6,8 +6,8 @@ import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/user';
 import { ItemResolver } from './resolvers/item';
 import { getTokenFromHeader, getUsernameFromToken } from './utils/jwt';
-import { seed } from './utils/seed';
 import { MyContext } from './utils/misc';
+// import { seed } from './utils/seed';
 
 const main = async () => {
     await mongoose.connect('mongodb://localhost/inventory-management', {
@@ -17,7 +17,7 @@ const main = async () => {
         useFindAndModify: false
     });
 
-    await seed();
+    // await seed();
 
     const app = express();
 
