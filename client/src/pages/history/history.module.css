@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.root {
+  display: flex;
+  max-width: 90%;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1 0 auto;
+}
+.cover {
+  width: 150px;
+  height: 150px;
+}

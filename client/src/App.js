@@ -5,6 +5,7 @@ import "./App.css";
 //pages
 import login from "./pages/login/login";
 import home from "./pages/home/home";
+import history from "./pages/history/history";
 
 //components
 import Navbar from "./components/Navbar/Navbar";
@@ -18,6 +19,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={home} />
             <Route exact path="/login" component={login} />
+            <Route exact path="/history" component={history} />
           </Switch>
         </div>
       </Router>
