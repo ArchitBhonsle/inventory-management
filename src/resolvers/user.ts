@@ -6,6 +6,7 @@ import { createToken } from '../utils/jwt';
 import { isAdmin } from '../utils/auth';
 import { MyContext } from '../utils/misc';
 import { COOKIE_TAG, __prod__ } from '../constants';
+import { getUserByUsername } from '../utils/db';
 
 @Resolver(User)
 export class UserResolver {
@@ -31,6 +32,19 @@ export class UserResolver {
             user = await UserModel.findOne({
                 username: usernameOrEmail
             });
+        }
+        return user;
+    }
+
+    @Query(() => User, { nullable: true })
+    async me(@Ctx() { username }: MyContext) {
+        if (!username) {
+            return null;
+        }
+
+        const user = await getUserByUsername(username);
+        if (!user) {
+            return null;
         }
         return user;
     }
