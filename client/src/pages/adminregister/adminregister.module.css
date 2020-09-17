@@ -1,0 +1,25 @@
+.form {
+  text-align: center;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+}
+
+.textField {
+  margin: 10px !important;
+}
+
+.pageTitle {
+  color: #a9a9a9;
+}
+
+.button {
+  margin: 15px !important;
+}
+
+.input {
+  display: none;
+  margin: 10px !important;
+}

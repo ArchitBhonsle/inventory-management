@@ -7,6 +7,7 @@ import login from "./pages/login/login";
 import home from "./pages/home/home";
 import history from "./pages/history/history";
 import admin from "./pages/admin/admin";
+import adminregister from "./pages/adminregister/adminregister";
 
 //components
 import Navbar from "./components/Navbar/Navbar";
@@ -22,6 +23,7 @@ function App() {
             <Route exact path="/login" component={login} />
             <Route exact path="/history" component={history} />
             <Route exact path="/admin" component={admin} />
+            <Route exact path="/adminregister" component={adminregister} />
           </Switch>
         </div>
       </Router>
