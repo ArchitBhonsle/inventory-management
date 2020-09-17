@@ -18,14 +18,6 @@ export function createToken(username: string): string {
     }
 }
 
-export function getTokenFromHeader(authHeader: string | undefined): string {
-    if (authHeader) {
-        return authHeader.split(' ')[1];
-    } else {
-        return '';
-    }
-}
-
 export function getUsernameFromToken(token: string): string | null {
     let username = null;
     try {

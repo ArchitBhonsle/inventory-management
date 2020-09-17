@@ -5,6 +5,7 @@ import { isEmail, isUsername } from '../utils/validation';
 import { createToken } from '../utils/jwt';
 import { isAdmin } from '../utils/auth';
 import { MyContext } from '../utils/misc';
+import { COOKIE_TAG, __prod__ } from '../constants';
 
 @Resolver(User)
 export class UserResolver {
@@ -39,7 +40,8 @@ export class UserResolver {
         @Arg('usernameOrEmail', () => String)
         usernameOrEmail: string,
         @Arg('password', () => String)
-        password: string
+        password: string,
+        @Ctx() { res }: MyContext
     ) {
         if (isEmail(usernameOrEmail)) {
             const user = await UserModel.findOne({
@@ -49,7 +51,13 @@ export class UserResolver {
                 return 'user not found';
             }
             if (await argon2.verify(user.password, password)) {
-                return createToken(user.username);
+                res.cookie(COOKIE_TAG, createToken(user.username), {
+                    signed: true,
+                    httpOnly: true,
+                    secure: __prod__,
+                    sameSite: 'lax'
+                });
+                return 'successfully logged in';
             } else {
                 return 'wrong passoword';
             }
@@ -61,7 +69,13 @@ export class UserResolver {
                 return 'user not found';
             }
             if (await argon2.verify(user.password, password)) {
-                return createToken(user.username);
+                res.cookie(COOKIE_TAG, createToken(user.username), {
+                    signed: true,
+                    httpOnly: true,
+                    secure: __prod__,
+                    sameSite: 'lax'
+                });
+                return 'successfully logged in';
             } else {
                 return 'wrong passoword';
             }

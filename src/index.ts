@@ -5,8 +5,10 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/user';
 import { ItemResolver } from './resolvers/item';
-import { getTokenFromHeader, getUsernameFromToken } from './utils/jwt';
+import cookieParser from 'cookie-parser';
+import { getUsernameFromToken } from './utils/jwt';
 import { MyContext } from './utils/misc';
+import { COOKIES_SECRET, COOKIE_TAG } from './constants';
 // import { seed } from './utils/seed';
 
 const main = async () => {
@@ -21,14 +23,16 @@ const main = async () => {
 
     const app = express();
 
+    app.use(cookieParser(COOKIES_SECRET));
+
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [ UserResolver, ItemResolver ]
         }),
-        context: async ({ req }): Promise<MyContext> => {
-            const token = getTokenFromHeader(req.headers.authorization);
+        context: async ({ req, res }): Promise<MyContext> => {
+            const token = req.signedCookies[COOKIE_TAG];
             const username = getUsernameFromToken(token);
-            return { username };
+            return { username, req, res };
         }
     });
 
