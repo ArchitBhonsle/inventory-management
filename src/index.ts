@@ -6,7 +6,7 @@ import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/user';
 import { ItemResolver } from './resolvers/item';
 import cookieParser from 'cookie-parser';
-import { getUsernameFromToken } from './utils/jwt';
+import { getUserInfoFromToken } from './utils/jwt';
 import { MyContext } from './utils/misc';
 import { COOKIES_SECRET, COOKIE_TAG } from './constants';
 // import { seed } from './utils/seed';
@@ -31,8 +31,8 @@ const main = async () => {
         }),
         context: async ({ req, res }): Promise<MyContext> => {
             const token = req.signedCookies[COOKIE_TAG];
-            const username = getUsernameFromToken(token);
-            return { username, req, res };
+            const userInfo = getUserInfoFromToken(token);
+            return { userInfo, req, res };
         }
     });
 

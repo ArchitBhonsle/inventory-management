@@ -1,16 +1,15 @@
 import jwt from 'jsonwebtoken';
 import { ACCESS_TOKEN_KEY } from '../constants';
 
-interface TokenPayload {
+export type TokenPayload = {
     username: string;
-    iat: number;
-    exp: number;
-}
+    isAdmin: boolean;
+};
 
-export function createToken(username: string): string {
+export function createToken(content: TokenPayload): string {
     let token = '';
     try {
-        token = jwt.sign({ username }, ACCESS_TOKEN_KEY, { expiresIn: '7d' });
+        token = jwt.sign(content, ACCESS_TOKEN_KEY, { expiresIn: '7d' });
     } catch (err) {
         // console.log(err);
     } finally {
@@ -18,14 +17,17 @@ export function createToken(username: string): string {
     }
 }
 
-export function getUsernameFromToken(token: string): string | null {
-    let username = null;
+export function getUserInfoFromToken(token: string): TokenPayload | null {
+    let userInfo = null;
     try {
         const parsedToken = jwt.verify(token, ACCESS_TOKEN_KEY) as TokenPayload;
-        username = parsedToken.username;
+        userInfo = {
+            username: parsedToken.username,
+            isAdmin: parsedToken.isAdmin
+        };
     } catch (err) {
         // console.log(err);
     } finally {
-        return username;
+        return userInfo;
     }
 }

@@ -3,49 +3,48 @@ import { UserModel, User } from '../models/User';
 import argon2 from 'argon2';
 import { isEmail, isUsername } from '../utils/validation';
 import { createToken } from '../utils/jwt';
-import { isAdmin } from '../utils/auth';
 import { MyContext } from '../utils/misc';
-import { COOKIE_TAG, __prod__ } from '../constants';
+import { COOKIE_TAG } from '../constants';
 import { getUserByUsername } from '../utils/db';
 
 @Resolver(User)
 export class UserResolver {
     @Query(() => [ User ])
-    async users(@Ctx() { username }: MyContext) {
-        const user = await isAdmin(username);
-        if (!user) return [];
-
-        return UserModel.find({});
+    async users(@Ctx() { userInfo }: MyContext) {
+        if (userInfo && userInfo.isAdmin) return UserModel.find({});
+        return [];
     }
 
     @Query(() => User, { nullable: true })
     async getUser(
         @Arg('usernameOrEmail', () => String)
-        usernameOrEmail: string
+        usernameOrEmail: string,
+        @Ctx() { userInfo }: MyContext
     ) {
-        let user = null;
+        if (!userInfo || !userInfo.isAdmin) return null;
+
+        let foundUser = null;
         if (isEmail(usernameOrEmail)) {
-            user = await UserModel.findOne({
+            foundUser = await UserModel.findOne({
                 email: usernameOrEmail
             });
         } else if (isUsername(usernameOrEmail)) {
-            user = await UserModel.findOne({
+            foundUser = await UserModel.findOne({
                 username: usernameOrEmail
             });
         }
-        return user;
+        return foundUser;
     }
 
     @Query(() => User, { nullable: true })
-    async me(@Ctx() { username }: MyContext) {
-        if (!username) {
+    async me(@Ctx() { userInfo }: MyContext) {
+        if (!userInfo) {
             return null;
         }
 
-        const user = await getUserByUsername(username);
-        if (!user) {
-            return null;
-        }
+        const user = await getUserByUsername(userInfo.username);
+        if (!user) return null;
+
         return user;
     }
 
@@ -61,16 +60,22 @@ export class UserResolver {
             const user = await UserModel.findOne({
                 email: usernameOrEmail
             });
-            if (!user) {
-                return 'user not found';
-            }
+            if (!user) return 'user not found';
+
             if (await argon2.verify(user.password, password)) {
-                res.cookie(COOKIE_TAG, createToken(user.username), {
-                    signed: true,
-                    httpOnly: true,
-                    secure: __prod__,
-                    sameSite: 'lax'
-                });
+                res.cookie(
+                    COOKIE_TAG,
+                    createToken({
+                        username: user.username,
+                        isAdmin: user.isAdmin
+                    }),
+                    {
+                        signed: true,
+                        httpOnly: true,
+                        secure: false,
+                        sameSite: 'lax'
+                    }
+                );
                 return 'successfully logged in';
             } else {
                 return 'wrong passoword';
@@ -83,12 +88,19 @@ export class UserResolver {
                 return 'user not found';
             }
             if (await argon2.verify(user.password, password)) {
-                res.cookie(COOKIE_TAG, createToken(user.username), {
-                    signed: true,
-                    httpOnly: true,
-                    secure: __prod__,
-                    sameSite: 'lax'
-                });
+                res.cookie(
+                    COOKIE_TAG,
+                    createToken({
+                        username: user.username,
+                        isAdmin: user.isAdmin
+                    }),
+                    {
+                        signed: true,
+                        httpOnly: true,
+                        secure: false,
+                        sameSite: 'lax'
+                    }
+                );
                 return 'successfully logged in';
             } else {
                 return 'wrong passoword';
@@ -121,7 +133,7 @@ export class UserResolver {
         lastname: string
     ) {
         const hashedPassword = await argon2.hash(password);
-        const user = new UserModel({
+        const newUser = new UserModel({
             username,
             email,
             department,
@@ -134,7 +146,7 @@ export class UserResolver {
         });
 
         try {
-            await user.save();
+            await newUser.save();
             return '';
         } catch (err) {
             console.log(err);
