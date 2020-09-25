@@ -1,4 +1,4 @@
-import { isAdmin } from '../utils/auth';
+import { getUserByUsername } from 'src/utils/db';
 import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
 import { Item, ItemModel } from '../models/Item';
 import { UserModel } from '../models/User';
@@ -54,9 +54,10 @@ export class ItemResolver {
         itemDescription: string,
         @Arg('image', () => String)
         itemImage: string,
-        @Ctx() { username }: MyContext
+        @Ctx() { userInfo }: MyContext
     ) {
-        const user = await isAdmin(username);
+        if (!userInfo || !userInfo.isAdmin) return 'not authorized';
+        const user = await getUserByUsername(userInfo.username);
         if (!user) return 'not authorized';
 
         if (itemCategory === '') {
@@ -66,7 +67,7 @@ export class ItemResolver {
         const item = new ItemModel({
             name: itemName,
             category: itemCategory,
-            department: user.username,
+            department: user.department,
             location: itemLocation,
             description: itemDescription,
             image: itemImage,
@@ -79,10 +80,10 @@ export class ItemResolver {
 
         try {
             await item.save();
-            return '';
+            return 'successfully added item';
         } catch (err) {
             console.log(err);
-            return 'Unknown error, please try again';
+            return 'unknown error, please try again';
         }
     }
 
@@ -91,18 +92,18 @@ export class ItemResolver {
         @Arg('id', () => String)
         itemId: string,
         @Arg('username', () => String)
-        username: string
+        username: string,
+        @Ctx() { userInfo }: MyContext
     ) {
+        if (!userInfo || !userInfo.isAdmin) return 'not authorized';
+
         const item = await ItemModel.findById(itemId);
-        if (!item) {
-            return 'Item doesn\'t exist';
-        }
+        if (!item) return "item doesn't exist";
 
         const lastUserUsername = item.history[item.history.length - 1].name;
         await UserModel.findOneAndUpdate(
             { username: lastUserUsername },
-            { $pull: { items: itemId } },
-            { new: true }
+            { $pull: { items: itemId } }
         );
 
         const user = await UserModel.findOneAndUpdate(
@@ -110,9 +111,7 @@ export class ItemResolver {
             { $push: { items: itemId } },
             { new: true }
         );
-        if (!user) {
-            return 'User doesn\'t exist';
-        }
+        if (!user) return "user doesn't exist";
 
         await ItemModel.findOneAndUpdate(
             { _id: itemId },
@@ -127,6 +126,6 @@ export class ItemResolver {
             }
         );
 
-        return 'Success';
+        return 'successfully added item';
     }
 }
