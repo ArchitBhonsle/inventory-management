@@ -21,6 +21,10 @@ const Login = () => {
     password: "",
   });
 
+  const [error, setError] = useState({
+    errors: null,
+  });
+
   const [runLoginQuery, { data }] = useLazyQuery(LOGIN_QUERY);
 
   const onSubmit = (e) => {
@@ -28,9 +32,25 @@ const Login = () => {
     runLoginQuery({
       variables: form,
     });
+
+    if (
+      data &&
+      (data.login === "wrong passoword" ||
+        data.login === "neither a username or an email" ||
+        data.login === "user not found")
+    ) {
+      console.log(data.Login);
+      setError({ errors: "invalid" });
+    }
+
+    if (data && data.login === "successfully logged in") {
+      window.location = "/";
+    }
   };
   useEffect(() => {
-    console.log(data);
+    if (data) {
+      console.log(data);
+    }
   }, [data]);
 
   return (
@@ -51,6 +71,8 @@ const Login = () => {
               fullWidth
               className={styles.textField}
               value={form.usernameOrEmail}
+              helperText={error.errors}
+              error={error.errors ? true : false}
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -67,6 +89,8 @@ const Login = () => {
               fullWidth
               className={styles.textField}
               value={form.password}
+              helperText={error.errors}
+              error={error.errors ? true : false}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
             <Button

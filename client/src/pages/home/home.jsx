@@ -25,27 +25,31 @@ const ME_QUERY = gql`
 const Home = () => {
   const { data } = useQuery(ME_QUERY);
 
-  console.log(data);
+  // console.log(data);
 
-  const render = data ? (
-    <Grid container spacing={4}>
-      <Grid item sm={8} xs={12}>
-        <h1>Current Items</h1>
-        <Paper>
-          <List />
-        </Paper>
-        <h1>Department Items</h1>
-        <Paper>
-          <List />
-        </Paper>
+  let render = null;
+
+  if (data != undefined && data.me != null) {
+    render = data ? (
+      <Grid container spacing={4}>
+        <Grid item sm={8} xs={12}>
+          <h1>Current Items</h1>
+          <Paper>
+            <List />
+          </Paper>
+          <h1>Department Items</h1>
+          <Paper>
+            <List />
+          </Paper>
+        </Grid>
+        <Grid item sm={4} xs={12}>
+          <Profile data={data.me} />
+        </Grid>
       </Grid>
-      <Grid item sm={4} xs={12}>
-        <Profile data={data.me} />
-      </Grid>
-    </Grid>
-  ) : (
-    <h1>Loading</h1>
-  );
+    ) : (
+      <h1>Loading</h1>
+    );
+  }
 
   return render;
 };
