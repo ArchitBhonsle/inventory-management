@@ -4,11 +4,17 @@ import { Types } from 'mongoose';
 
 @ObjectType()
 class HistoryEntry {
-    @Field() name: string;
+    @Field()
+    @prop()
+    name: string;
 
-    @Field() isDepartment: boolean;
+    @Field()
+    @prop()
+    isDepartment: boolean;
 
-    @Field() timeOfTransfer: Date;
+    @Field()
+    @prop()
+    timeOfTransfer: Date;
 }
 
 @ObjectType()
@@ -46,7 +52,7 @@ export class Item {
     public image: string;
 
     @Field(() => [ HistoryEntry ])
-    @prop({ required: true, default: [] })
+    @prop({ required: true, type: HistoryEntry })
     public history: HistoryEntry[];
 }
 
