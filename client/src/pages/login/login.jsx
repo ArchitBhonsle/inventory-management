@@ -44,7 +44,7 @@ const Login = () => {
     }
 
     if (data && data.login === "successfully logged in") {
-      window.location = "/";
+      window.location = "/home";
     }
   };
   useEffect(() => {

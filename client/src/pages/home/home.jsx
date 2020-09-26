@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 //material ui
-import { Grid, Paper } from "@material-ui/core";
+import { Button, Grid, Paper } from "@material-ui/core";
 
 //components
 import Profile from "../../components/Profile/Profile";
@@ -9,6 +10,9 @@ import List from "../../components/List/List";
 
 //graphql
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
+
+//styles
+import styles from "./home.module.css";
 
 const ME_QUERY = gql`
   query {
@@ -48,6 +52,17 @@ const Home = () => {
       </Grid>
     ) : (
       <h1>Loading</h1>
+    );
+  } else {
+    render = (
+      <div className={styles.main}>
+        <Paper>
+          <h1>Please Log In</h1>
+          <Button component={Link} to="/" color="secondary" variant="outlined">
+            Log In
+          </Button>
+        </Paper>
+      </div>
     );
   }
 

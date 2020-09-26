@@ -59,6 +59,8 @@ const Adminregister = () => {
     runRegisterMutation({
       variables: form,
     });
+
+    window.location = "/";
   };
 
   useEffect(() => {
@@ -68,17 +70,19 @@ const Adminregister = () => {
   let newimage = "";
   const convertImageToBase64 = (e) => {
     const file = e.target.files[0];
-    console.log(file);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      newimage = reader.result;
-      console.log(newimage);
-      setForm({
-        ...form,
-        image: newimage,
-      });
-    };
+    if (file) {
+      console.log(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        newimage = reader.result;
+        console.log(newimage);
+        setForm({
+          ...form,
+          image: newimage,
+        });
+      };
+    }
   };
 
   return (
@@ -241,7 +245,7 @@ const Adminregister = () => {
               className={styles.button}
               onClick={onSubmit}
             >
-              Login
+              Register
             </Button>
           </form>
         </Grid>
