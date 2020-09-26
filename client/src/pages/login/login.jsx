@@ -29,25 +29,28 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     runLoginQuery({
       variables: form,
     });
 
+    console.log(data);
+  };
+  useEffect(() => {
     if (
       data &&
       (data.login === "wrong passoword" ||
         data.login === "neither a username or an email" ||
         data.login === "user not found")
     ) {
-      console.log(data.Login);
-      setError({ errors: "invalid" });
+      // console.log(data.Login);
+      setError({ errors: "Invalid" });
     }
 
     if (data && data.login === "successfully logged in") {
       window.location = "/home";
     }
-  };
-  useEffect(() => {
+
     if (data) {
       console.log(data);
     }
