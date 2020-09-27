@@ -16,6 +16,7 @@ import styles from "./adminregister.module.css";
 
 const REGISTER_MUTATION = gql`
   mutation register(
+    $isAdmin: Boolean!
     $firstname: String!
     $lastname: String!
     $image: String!
@@ -27,6 +28,7 @@ const REGISTER_MUTATION = gql`
     $password: String!
   ) {
     register(
+      isAdmin: $isAdmin
       firstname: $firstname
       lastname: $lastname
       image: $image
@@ -42,7 +44,7 @@ const REGISTER_MUTATION = gql`
 
 const Adminregister = () => {
   const [form, setForm] = useState({
-    isAdmin: "",
+    isAdmin: false,
     firstname: "",
     lastname: "",
     image: "",
@@ -66,7 +68,7 @@ const Adminregister = () => {
       variables: form,
     });
 
-    window.location = "/";
+    // window.location = "/";
   };
 
   useEffect(() => {
@@ -101,17 +103,17 @@ const Adminregister = () => {
           </Typography>
 
           <form noValidate>
-            <FormControl
-              className={styles.formControl}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  isAdmin: e.target.value,
-                })
-              }
-            >
+            <FormControl className={styles.formControl}>
               <InputLabel>Is Admin</InputLabel>
-              <Select label="Boolean">
+              <Select
+                label="Boolean"
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    isAdmin: e.target.value,
+                  })
+                }
+              >
                 <MenuItem value={false}>False</MenuItem>
                 <MenuItem value={true}>True</MenuItem>
               </Select>
