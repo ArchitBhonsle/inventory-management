@@ -68,7 +68,7 @@ const Adminregister = () => {
       variables: form,
     });
 
-    // window.location = "/";
+    window.location = "/";
   };
 
   useEffect(() => {
