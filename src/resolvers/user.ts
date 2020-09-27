@@ -6,6 +6,7 @@ import { createToken } from '../utils/jwt';
 import { MyContext } from '../utils/misc';
 import { COOKIE_TAG } from '../constants';
 import { getUserByUsername } from '../utils/db';
+import { Item, ItemModel } from '../models/Item';
 
 @Resolver(User)
 export class UserResolver {
@@ -46,6 +47,48 @@ export class UserResolver {
         if (!user) return null;
 
         return user;
+    }
+
+    @Query(() => [ Item ])
+    async myItems(@Ctx() { userInfo }: MyContext) {
+        if (!userInfo) {
+            return [];
+        }
+        const user = await getUserByUsername(userInfo.username);
+        if (!user) return [];
+
+        const itemIds = user.items;
+        const items = itemIds.map((itemId) => ItemModel.findById(itemId));
+
+        return items;
+    }
+
+    @Query(() => [ Item ])
+    async getUsersItems(
+        @Arg('usernameOrEmail', () => String)
+        usernameOrEmail: string,
+        @Ctx() { userInfo }: MyContext
+    ) {
+        if (!userInfo || !userInfo.isAdmin) {
+            return [];
+        }
+
+        let foundUser = null;
+        if (isEmail(usernameOrEmail)) {
+            foundUser = await UserModel.findOne({
+                email: usernameOrEmail
+            });
+        } else if (isUsername(usernameOrEmail)) {
+            foundUser = await UserModel.findOne({
+                username: usernameOrEmail
+            });
+        }
+        if (!foundUser) return [];
+
+        const itemIds = foundUser.items;
+        const items = itemIds.map((itemId) => ItemModel.findById(itemId));
+
+        return items;
     }
 
     @Query(() => String)
