@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 //material ui
@@ -9,7 +9,7 @@ import Profile from "../../components/Profile/Profile";
 import List from "../../components/List/List";
 
 //graphql
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
 //styles
 import styles from "./home.module.css";
@@ -33,7 +33,7 @@ const Home = () => {
 
   let render = null;
 
-  if (data != undefined && data.me != null) {
+  if (data !== undefined && data.me !== null) {
     render = data ? (
       <Grid container spacing={4}>
         <Grid item sm={8} xs={12}>

@@ -1,71 +1,49 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
-//material ui
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
+//component
+import HistoryItem from "../../components/HistoryItem/HistoryItem";
 
-import styles from "./history.module.css";
+import { gql, useQuery } from "@apollo/client";
 
-const history = () => {
+const HISTORYITEM_QUERY = gql`
+  query itemById($id: String!) {
+    getItemById(id: $id) {
+      name
+      id
+      location
+      history {
+        name
+        isDepartment
+        timeOfTransfer
+      }
+      image
+    }
+  }
+`;
+
+const History = (props) => {
+  let id = null;
+
+  id = props.match.params.id;
+
+  // console.log(id);
+
+  const { data: histi } = useQuery(HISTORYITEM_QUERY, { variables: { id } });
+
+  let hisitems = null;
+  if (histi && histi.getItemById !== null) {
+    // console.log(histi.getItemById);
+    hisitems = histi.getItemById.history.map((obj) => {
+      return <HistoryItem data={obj} additiondata={histi.getItemById} />;
+    });
+  }
+
   return (
     <Fragment>
       <h1>Item History</h1>
-      <div className={styles.main}>
-        <Card className={styles.root}>
-          <div className={styles.details}>
-            <CardContent className={styles.content}>
-              <Typography component="h5" variant="h5">
-                Gunsdnaosdao
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                id
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                department
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                date
-              </Typography>
-            </CardContent>
-          </div>
-
-          <CardMedia
-            className={styles.cover}
-            image="https://www.techbooky.com/wp-content/uploads/2020/06/1200px-Google_Photos_icon_2020.svg.png"
-            title="Live from space album cover"
-          />
-        </Card>
-      </div>
-      <div className={styles.main}>
-        <Card className={styles.root}>
-          <div className={styles.details}>
-            <CardContent className={styles.content}>
-              <Typography component="h5" variant="h5">
-                Heavy motor vehicle
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                id
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                department
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                date
-              </Typography>
-            </CardContent>
-          </div>
-
-          <CardMedia
-            className={styles.cover}
-            image="https://www.techbooky.com/wp-content/uploads/2020/06/1200px-Google_Photos_icon_2020.svg.png"
-            title="Live from space album cover"
-          />
-        </Card>
-      </div>
+      {hisitems}
     </Fragment>
   );
 };
 
-export default history;
+export default History;

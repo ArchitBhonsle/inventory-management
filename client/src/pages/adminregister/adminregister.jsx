@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
+
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 //graphql
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
 //styles
 import styles from "./adminregister.module.css";

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 //material ui
-import { Grid, Paper } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 //components
 import Profile from "../../components/Profile/Profile";
@@ -10,7 +10,7 @@ import AdminSelector from "../../components/AdminSelector/AdminSelector";
 import AdminAddItem from "../../components/AdminAddItem/AdminAddItem";
 
 //graphql
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
 const ME_QUERY = gql`
   query {
@@ -24,23 +24,52 @@ const ME_QUERY = gql`
   }
 `;
 
+const DEPTITEM_QUERY = gql`
+  query getItemsByDepartment($department: String!) {
+    getItemsByDepartment(department: $department) {
+      id
+      name
+      location
+      image
+      history {
+        name
+        timeOfTransfer
+      }
+    }
+  }
+`;
+
 const Admin = () => {
-  const { data } = useQuery(ME_QUERY);
+  const { data: medata } = useQuery(ME_QUERY);
+  const department = medata?.me?.department;
+  const { data: depti } = useQuery(DEPTITEM_QUERY, {
+    skip: !department,
+    variables: { department },
+  });
+
+  // console.log(depti);
+  let items = null;
+
+  if (depti && depti.getItemsByDepartment) {
+    items = depti.getItemsByDepartment.map((obj, i) => {
+      return <AdminItem data={depti.getItemsByDepartment[i]} />;
+    });
+  }
 
   let render = null;
 
   render =
-    data && data.me != null ? (
+    depti && depti.getItemsByDepartment && medata && medata.me !== null ? (
       <Grid container spacing={4}>
         <Grid item sm={8} xs={12}>
           <h1>Add Items</h1>
           <AdminAddItem />
           <h1>Department items</h1>
           <AdminSelector />
-          <AdminItem />
+          {items}
         </Grid>
         <Grid item sm={4} xs={12}>
-          <Profile data={data.me} />
+          <Profile data={medata.me} />
         </Grid>
       </Grid>
     ) : (

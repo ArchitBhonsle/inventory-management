@@ -6,7 +6,7 @@ import { AppBar, Toolbar, Button, Tooltip } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 //graphql
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
 //styles
 import styles from "./Navbar.module.css";
@@ -22,11 +22,11 @@ const ME_QUERY = gql`
 const Navbar = () => {
   const { data } = useQuery(ME_QUERY);
 
-  console.log(data);
+  // console.log(data);
 
   let navbar = null;
 
-  if (data != undefined && data.me != null && data.me.isAdmin === true) {
+  if (data !== undefined && data.me !== null && data.me.isAdmin === true) {
     navbar = (
       <Fragment>
         <Button component={Link} to="/" color="inherit">

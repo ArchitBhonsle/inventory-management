@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 //material ui
 import Card from "@material-ui/core/Card";
@@ -12,32 +13,35 @@ import Typography from "@material-ui/core/Typography";
 //styles
 import styles from "./AdminItem.module.css";
 
-const AdminItem = () => {
+const AdminItem = ({ data: { name, location, image, history, id } }) => {
+  console.log(history);
+
   return (
     <Card className={styles.root}>
       <CardActionArea>
-        <CardMedia
-          className={styles.media}
-          image="https://www.techbooky.com/wp-content/uploads/2020/06/1200px-Google_Photos_icon_2020.svg.png"
-          title="Contemplative Reptile"
-        />
+        <CardMedia className={styles.media} image={image} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Gun
+            {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Discription
+            {location}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Current Department
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            #id
+            ID #{id}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button
+          size="small"
+          color="primary"
+          component={Link}
+          to={`history/${id}`}
+        >
           History
         </Button>
       </CardActions>
