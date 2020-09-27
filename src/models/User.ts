@@ -15,7 +15,7 @@ export class User {
     public password: string;
 
     @Field(() => [ String ])
-    @prop({ required: true, default: [] })
+    @prop({ required: true, default: [], type: String })
     public items: string[];
 
     @Field(() => String)

@@ -35,7 +35,7 @@ export class ItemResolver {
         return ItemModel.find({ department: deptName });
     }
 
-    @Query(() => [ Item ])
+    @Query(() => Item)
     getItemById(
         @Arg('id', () => String)
         itemID: string
@@ -78,9 +78,11 @@ export class ItemResolver {
                 timeOfTransfer: new Date()
             }
         });
+        user.items.push(item.id);
 
         try {
             await item.save();
+            await user.save();
             return 'successfully added item';
         } catch (err) {
             console.log(err);
@@ -114,19 +116,32 @@ export class ItemResolver {
         );
         if (!user) return "user doesn't exist";
 
-        await ItemModel.findOneAndUpdate(
-            { _id: itemId },
-            {
-                $push: {
-                    history: {
-                        name: user.username,
-                        isDepartment: user.isAdmin,
-                        timeOfTransfer: new Date()
-                    }
-                }
-            }
-        );
+        item.history.push({
+            name: user.username,
+            isDepartment: user.isAdmin,
+            timeOfTransfer: new Date()
+        });
+        item.save();
 
         return 'successfully added item';
+    }
+
+    @Mutation(() => String)
+    async deleteItem(
+        @Arg('id', () => String)
+        itemId: string,
+        @Ctx() { userInfo }: MyContext
+    ) {
+        if (!userInfo || !userInfo.isAdmin) return 'not authorized';
+
+        const item = await ItemModel.findByIdAndDelete(itemId);
+        if (!item) return "item does'nt exist";
+        const lastUserUsername = item.history[item.history.length - 1].name;
+        await UserModel.findOneAndUpdate(
+            { username: lastUserUsername },
+            { $pull: { items: itemId } }
+        );
+
+        return 'item successfully deleted';
     }
 }
