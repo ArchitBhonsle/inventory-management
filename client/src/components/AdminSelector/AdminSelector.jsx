@@ -13,12 +13,8 @@ import styles from "./AdminSelector.module.css";
 const AdminSelector = () => {
   return (
     <FormControl className={styles.formControl}>
-      <InputLabel id="demo-simple-select-outlined-label">Category</InputLabel>
-      <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        label="Age"
-      >
+      <InputLabel>Category</InputLabel>
+      <Select label="Age">
         <MenuItem value="">
           <em>None</em>
         </MenuItem>

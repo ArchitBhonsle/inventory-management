@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 
 //material ui
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 //graphql
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
@@ -37,6 +42,7 @@ const REGISTER_MUTATION = gql`
 
 const Adminregister = () => {
   const [form, setForm] = useState({
+    isAdmin: "",
     firstname: "",
     lastname: "",
     image: "",
@@ -95,6 +101,21 @@ const Adminregister = () => {
           </Typography>
 
           <form noValidate>
+            <FormControl
+              className={styles.formControl}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  isAdmin: e.target.value,
+                })
+              }
+            >
+              <InputLabel>Is Admin</InputLabel>
+              <Select label="Boolean">
+                <MenuItem value={false}>False</MenuItem>
+                <MenuItem value={true}>True</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               id="username"
               name="username"

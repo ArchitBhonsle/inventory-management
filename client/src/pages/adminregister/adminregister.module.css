@@ -23,3 +23,8 @@
   display: none;
   margin: 10px !important;
 }
+
+.formControl {
+  margin: 10px;
+  width: 150px;
+}
