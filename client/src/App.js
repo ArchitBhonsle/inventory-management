@@ -8,6 +8,8 @@ import home from "./pages/home/home";
 import history from "./pages/history/history";
 import admin from "./pages/admin/admin";
 import adminregister from "./pages/adminregister/adminregister";
+import items from "./pages/items/items";
+import totalview from "./pages/totalview/totalview";
 
 //components
 import Navbar from "./components/Navbar/Navbar";
@@ -24,6 +26,8 @@ function App() {
             <Route exact path="/history/:id" component={history} />
             <Route exact path="/admin" component={admin} />
             <Route exact path="/adminregister" component={adminregister} />
+            <Route exact path="/items" component={items} />
+            <Route exact path="/totalview/:id" component={totalview} />
           </Switch>
         </div>
       </Router>

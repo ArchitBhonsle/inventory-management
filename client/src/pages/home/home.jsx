@@ -26,28 +26,49 @@ const ME_QUERY = gql`
   }
 `;
 
-const Home = () => {
-  const { data } = useQuery(ME_QUERY);
+const MEITEMS_QUERY = gql`
+  query getUsersItems($uoe: String!) {
+    getUsersItems(usernameOrEmail: $uoe) {
+      id
+      name
+      category
+    }
+  }
+`;
 
-  // console.log(data);
+const Home = () => {
+  const { data: medata } = useQuery(ME_QUERY);
+  const uoe = medata?.me?.username;
+  const { data: itemdata } = useQuery(MEITEMS_QUERY, {
+    skip: !uoe,
+    variables: { uoe },
+  });
+
+  let list = null;
+
+  if (
+    itemdata &&
+    itemdata.getUsersItems &&
+    medata !== undefined &&
+    medata.me !== null
+  ) {
+    list = itemdata.getUsersItems.map((obj) => {
+      // console.log(obj);
+      return <List data={obj} username={medata.me.username} />;
+    });
+  }
 
   let render = null;
 
-  if (data !== undefined && data.me !== null) {
-    render = data ? (
+  if (medata !== undefined && medata.me !== null) {
+    render = medata ? (
       <Grid container spacing={4}>
         <Grid item sm={8} xs={12}>
           <h1>Current Items</h1>
-          <Paper>
-            <List />
-          </Paper>
-          <h1>Department Items</h1>
-          <Paper>
-            <List />
-          </Paper>
+          <Paper>{list}</Paper>
         </Grid>
         <Grid item sm={4} xs={12}>
-          <Profile data={data.me} />
+          <Profile data={medata.me} />
         </Grid>
       </Grid>
     ) : (

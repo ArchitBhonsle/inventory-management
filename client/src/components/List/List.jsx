@@ -4,14 +4,11 @@ import Tree from "react-animated-tree";
 //styles
 import "./List.css";
 
-const List = () => {
+const List = ({ data: { name }, username }) => {
   return (
     <Fragment>
-      <Tree content="Inspector pinto" open>
-        <Tree content="gun"></Tree>
-        <Tree content="vehicle">
-          <Tree content="fuel 15lt"></Tree>
-        </Tree>
+      <Tree content={username} open>
+        <Tree content={name}></Tree>
       </Tree>
     </Fragment>
   );

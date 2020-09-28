@@ -18,7 +18,7 @@ const AdminItem = ({ data: { name, location, image, history, id } }) => {
 
   return (
     <Card className={styles.root}>
-      <CardActionArea>
+      <CardActionArea component={Link} to={`totalview/${id}`}>
         <CardMedia className={styles.media} image={image} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -35,16 +35,6 @@ const AdminItem = ({ data: { name, location, image, history, id } }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        <Button
-          size="small"
-          color="primary"
-          component={Link}
-          to={`history/${id}`}
-        >
-          History
-        </Button>
-      </CardActions>
     </Card>
   );
 };
