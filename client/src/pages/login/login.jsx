@@ -51,10 +51,6 @@ const Login = () => {
       if (data && data.login === 'successfully logged in') {
         window.location = '/home';
       }
-
-      if (data) {
-        console.log(data);
-      }
     },
     [ data ]
   );

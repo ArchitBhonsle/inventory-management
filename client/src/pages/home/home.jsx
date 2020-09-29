@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Tree from "react-animated-tree";
 
 //material ui
 import { Button, Grid, Paper } from "@material-ui/core";
 
 //components
 import Profile from "../../components/Profile/Profile";
-import List from "../../components/List/List";
+
+import TotalViewItem from "../../components/TotalViewItem/TotalViewItem";
 
 //graphql
 import { gql, useQuery } from "@apollo/client";
@@ -32,7 +32,10 @@ const MEITEMS_QUERY = gql`
     getUsersItems(usernameOrEmail: $uoe) {
       id
       name
-      category
+      department
+
+      location
+      image
     }
   }
 `;
@@ -55,7 +58,7 @@ const Home = () => {
   ) {
     list = itemdata.getUsersItems.map((obj) => {
       // console.log(obj);
-      return <List data={obj} />;
+      return <TotalViewItem data={obj} />;
     });
   }
 
@@ -66,11 +69,8 @@ const Home = () => {
       <Grid container spacing={4}>
         <Grid item sm={8} xs={12}>
           <h1>Current Items</h1>
-          <Paper>
-            <Tree content={medata.me.username} open>
-              {list}
-            </Tree>
-          </Paper>
+
+          {list}
         </Grid>
         <Grid item sm={4} xs={12}>
           <Profile data={medata.me} />
