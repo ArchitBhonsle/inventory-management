@@ -1,20 +1,20 @@
-import React, { useEffect, Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 
 //material ui
-import { Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
+import { Paper, Typography, Tooltip, IconButton } from "@material-ui/core";
 
 //dumb way to get link
-import MuiLink from '@material-ui/core/Link';
+import MuiLink from "@material-ui/core/Link";
 
 //icons
-import { LocationOn, ExitToApp } from '@material-ui/icons';
+import { LocationOn, ExitToApp } from "@material-ui/icons";
 
 //graphql
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from "@apollo/client";
 
 //styles
-import styles from './Profile.module.css';
+import styles from "./Profile.module.css";
 
 const LOGOUT_MUTATION = gql`
   mutation logout {
@@ -23,22 +23,19 @@ const LOGOUT_MUTATION = gql`
 `;
 
 const Profile = ({ data: { username, bio, department, image } }) => {
-  const [ logout, { data, client } ] = useMutation(LOGOUT_MUTATION);
+  const [logout, { data, client }] = useMutation(LOGOUT_MUTATION);
   const history = useHistory();
 
-  useEffect(
-    () => {
-      if (data) {
-        if (data.logout === 'logged out') {
-          client.clearStore();
-          history.push('/');
-        } else if (data.logout === 'unknown error please try again') {
-          // handle error
-        }
+  useEffect(() => {
+    if (data) {
+      if (data.logout === "logged out") {
+        client.clearStore();
+        history.push("/");
+      } else if (data.logout === "unknown error please try again") {
+        // handle error
       }
-    },
-    [ data, client, history ]
-  );
+    }
+  }, [data, client, history]);
 
   return (
     <Paper className={styles.paper}>
@@ -48,7 +45,7 @@ const Profile = ({ data: { username, bio, department, image } }) => {
         </div>
         <hr className={styles.hruler} />
         <div className={styles.profileDetails}>
-          <MuiLink component={Link} color="primary" variant="h5">
+          <MuiLink color="primary" variant="h5">
             {username}
           </MuiLink>
           <hr />

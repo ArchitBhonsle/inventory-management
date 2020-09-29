@@ -58,7 +58,7 @@ const Home = () => {
   ) {
     list = itemdata.getUsersItems.map((obj) => {
       // console.log(obj);
-      return <TotalViewItem data={obj} />;
+      return <TotalViewItem key={obj.id} data={obj} />;
     });
   }
 
