@@ -1,0 +1,8 @@
+.transfer {
+  display: flex;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 20px;
+}
