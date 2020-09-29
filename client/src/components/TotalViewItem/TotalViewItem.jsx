@@ -12,9 +12,7 @@ import Typography from "@material-ui/core/Typography";
 //styles
 import styles from "./TotalViewItem.module.css";
 
-const TotalViewItem = ({
-  data: { name, location, image, history, id, department },
-}) => {
+const TotalViewItem = ({ data: { name, location, image, id, department } }) => {
   return (
     <Card className={styles.root}>
       <CardMedia className={styles.media} image={image} />
@@ -29,7 +27,7 @@ const TotalViewItem = ({
           {department}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          ID #{id}
+          {id}
         </Typography>
       </CardContent>
     </Card>
