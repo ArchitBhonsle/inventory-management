@@ -1,15 +1,15 @@
-import React, { Fragment, useEffect } from "react";
+import React from 'react';
 
 //material ui
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
 
-import styles from "./HistoryItem.module.css";
+import styles from './HistoryItem.module.css';
 const HistoryItem = ({
-  data: { name, timeOfTransfer },
-  additiondata: { id, image, location },
+  data         : { name, timeOfTransfer },
+  additiondata : { id, image, location }
 }) => {
   return (
     <div className={styles.main}>

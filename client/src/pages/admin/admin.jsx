@@ -1,15 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 //material ui
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid } from '@material-ui/core';
 
 //components
-import Profile from "../../components/Profile/Profile";
-import AdminAddItem from "../../components/AdminAddItem/AdminAddItem";
+import Profile from '../../components/Profile/Profile';
 
 //graphql
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery } from '@apollo/client';
 
 const ME_QUERY = gql`
   query {
@@ -25,14 +24,14 @@ const ME_QUERY = gql`
 `;
 
 const Admin = () => {
-  const { data: medata } = useQuery(ME_QUERY);
+  const { data: meData } = useQuery(ME_QUERY);
   // console.log(medata);
 
   let render = null;
 
-  if (medata && medata.me.isAdmin === true) {
+  if (meData && meData.me.isAdmin === true) {
     render =
-      medata && medata.me !== null ? (
+      meData && meData.me !== null ? (
         <Grid container spacing={4}>
           <Grid item sm={8} xs={12}>
             <h1>Deparment Items</h1>
@@ -46,7 +45,7 @@ const Admin = () => {
             </Button>
           </Grid>
           <Grid item sm={4} xs={12}>
-            <Profile data={medata.me} />
+            <Profile data={meData.me} />
           </Grid>
         </Grid>
       ) : (

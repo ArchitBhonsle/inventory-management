@@ -37,7 +37,7 @@ const Profile = ({ data: { username, bio, department, image } }) => {
         }
       }
     },
-    [ data, client ]
+    [ data, client, history ]
   );
 
   return (

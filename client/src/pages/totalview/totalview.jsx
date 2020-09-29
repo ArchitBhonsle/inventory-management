@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from 'react';
 
 //component
-import HistoryItem from "../../components/HistoryItem/HistoryItem";
-import AdminItem from "../../components/AdminItem/AdminItem";
+import HistoryItem from '../../components/HistoryItem/HistoryItem';
+import AdminItem from '../../components/AdminItem/AdminItem';
 
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery } from '@apollo/client';
 
 const HISTORYITEM_QUERY = gql`
   query itemById($id: String!) {

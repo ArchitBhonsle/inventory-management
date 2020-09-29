@@ -1,20 +1,20 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from 'react';
 
 //material ui
-import { Grid, Typography } from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { Grid, Typography } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 //components
-import AdminItem from "../../components/AdminItem/AdminItem";
+import AdminItem from '../../components/AdminItem/AdminItem';
 
 //graphql
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 //styles
-import styles from "./items.module.css";
+import styles from './items.module.css';
 
 const ME_QUERY = gql`
   query {
@@ -29,23 +29,7 @@ const ME_QUERY = gql`
   }
 `;
 
-const DEPTITEM_QUERY = gql`
-  query getItemsByDepartment($department: String!) {
-    getItemsByDepartment(department: $department) {
-      id
-      name
-      location
-      department
-      image
-      history {
-        name
-        timeOfTransfer
-      }
-    }
-  }
-`;
-
-const CAT_QUERY = gql`
+const ITEMS_QUERY = gql`
   query getItemsByDepartmentAndCategory(
     $category: String!
     $department: String!
@@ -63,38 +47,37 @@ const CAT_QUERY = gql`
 `;
 
 const Items = () => {
-  const [cat, setCat] = useState({
-    category: "",
-  });
+  const { data: meData } = useQuery(ME_QUERY);
+  let department = undefined;
+  if (meData && meData.me) department = meData.me.department;
 
-  const { data: medata } = useQuery(ME_QUERY);
-  // console.log(medata);
-  const department = medata?.me?.department;
-  const { data: depti } = useQuery(DEPTITEM_QUERY, {
-    skip: !department,
-    variables: { department },
-  });
+  const [ category, setCategory ] = useState('');
+  const [ runItemsQuery, { data } ] = useLazyQuery(ITEMS_QUERY);
+  const [ items, setItems ] = useState(null);
 
-  let item = null;
+  useEffect(
+    () => {
+      if (department) {
+        runItemsQuery({
+          variables : { department, category }
+        });
+      }
+    },
+    [ category, department, runItemsQuery ]
+  );
 
-  if (depti && depti.getItemsByDepartment) {
-    item = depti.getItemsByDepartment.map((obj, i) => {
-      return <AdminItem data={depti.getItemsByDepartment[i]} />;
-    });
-  }
-
-  const [runcatqry, { data: catitems }] = useLazyQuery(CAT_QUERY, {
-    skip: !department,
-  });
-
-  const [cat1, setcat] = useState("");
-
-  const catqryvars = {
-    category: cat1,
-    department,
-  };
-
-  // console.log(cat1);
+  useEffect(
+    () => {
+      if (data && data.getItemsByDepartmentAndCategory) {
+        setItems(
+          data.getItemsByDepartmentAndCategory.map((item, ind) => {
+            return <AdminItem data={item} key={ind} />;
+          })
+        );
+      }
+    },
+    [ data ]
+  );
 
   return (
     <Fragment>
@@ -104,19 +87,20 @@ const Items = () => {
           <Select
             label="Category"
             onChange={(e) => {
-              setcat(e.target.value);
+              setCategory(e.target.value);
             }}
-            value={cat1}
+            value={category}
           >
-            <MenuItem value="fire arm">firearm</MenuItem>
-            <MenuItem value="dummy">dummy</MenuItem>
-            <MenuItem value="dion">dion</MenuItem>
+            <MenuItem value="">None</MenuItem>
+            <MenuItem value="item1">u</MenuItem>
+            <MenuItem value="v">v</MenuItem>
+            <MenuItem value="w">w</MenuItem>
           </Select>
         </FormControl>
       </Typography>
 
       <Grid container spacing={4}>
-        {item}
+        {items}
       </Grid>
     </Fragment>
   );

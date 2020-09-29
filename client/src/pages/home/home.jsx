@@ -8,7 +8,6 @@ import { Button, Grid, Paper } from "@material-ui/core";
 //components
 import Profile from "../../components/Profile/Profile";
 import List from "../../components/List/List";
-import AdminItem from "../../components/AdminItem/AdminItem";
 
 //graphql
 import { gql, useQuery } from "@apollo/client";
