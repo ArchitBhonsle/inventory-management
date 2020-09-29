@@ -75,11 +75,11 @@ const Totalview = (props) => {
   }
 
   const [ form, setForm ] = useState({
-    itemId   : '',
+    itemId   : id,
     username : ''
   });
 
-  const [ runTransferQuery, { data } ] = useMutation(TRANSFER_QUERY);
+  const [ runTransferQuery ] = useMutation(TRANSFER_QUERY);
 
   const onSubmit = (e) => {
     runTransferQuery({
@@ -93,19 +93,6 @@ const Totalview = (props) => {
   return (
     <Fragment>
       <div className={styles.transfer}>
-        <TextField
-          id="itemid"
-          name="itemid"
-          type="text"
-          label="item id"
-          variant="outlined"
-          value={form.itemId}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              itemId : e.target.value
-            })}
-        />
         <TextField
           id="transferuser"
           name="transferuser"
