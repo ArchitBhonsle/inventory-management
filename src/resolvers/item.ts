@@ -42,6 +42,8 @@ export class ItemResolver {
     @Arg('category', () => String)
     itemCategoryName: string
   ) {
+    if (itemCategoryName === '')
+      return ItemModel.find({ department: deptName });
     return ItemModel.find({ department: deptName, category: itemCategoryName });
   }
 
