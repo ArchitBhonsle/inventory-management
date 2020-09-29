@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 //component
 import HistoryItem from "../../components/HistoryItem/HistoryItem";
-import AdminItem from "../../components/AdminItem/AdminItem";
+import TotalViewItem from "../../components/TotalViewItem/TotalViewItem";
 
 //material ui
 import TextField from "@material-ui/core/TextField";
@@ -71,7 +71,7 @@ const Totalview = (props) => {
   let itemtot = null;
 
   if (item && item.getItemById !== null) {
-    itemtot = <AdminItem data={item.getItemById} />;
+    itemtot = <TotalViewItem data={item.getItemById} />;
   }
 
   const [form, setForm] = useState({
