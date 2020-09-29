@@ -13,9 +13,9 @@ import Typography from "@material-ui/core/Typography";
 //styles
 import styles from "./AdminItem.module.css";
 
-const AdminItem = ({ data: { name, location, image, history, id } }) => {
-  console.log(history);
-
+const AdminItem = ({
+  data: { name, location, image, history, id, department },
+}) => {
   return (
     <Card className={styles.root}>
       <CardActionArea component={Link} to={`totalview/${id}`}>
@@ -28,7 +28,7 @@ const AdminItem = ({ data: { name, location, image, history, id } }) => {
             {location}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Current Department
+            {department}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             ID #{id}

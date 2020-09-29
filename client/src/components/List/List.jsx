@@ -4,12 +4,10 @@ import Tree from "react-animated-tree";
 //styles
 import "./List.css";
 
-const List = ({ data: { name }, username }) => {
+const List = ({ data: { name } }) => {
   return (
     <Fragment>
-      <Tree content={username} open>
-        <Tree content={name}></Tree>
-      </Tree>
+      <Tree content={name}></Tree>
     </Fragment>
   );
 };

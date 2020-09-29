@@ -11,3 +11,8 @@
   max-width: 80%;
   margin-left: 45px;
 }
+
+.formControl {
+  margin: 10px;
+  width: 150px;
+}

@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 //material ui
-import { Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 
 //components
 import Profile from "../../components/Profile/Profile";
@@ -23,21 +24,6 @@ const ME_QUERY = gql`
   }
 `;
 
-const DEPTITEM_QUERY = gql`
-  query getItemsByDepartment($department: String!) {
-    getItemsByDepartment(department: $department) {
-      id
-      name
-      location
-      image
-      history {
-        name
-        timeOfTransfer
-      }
-    }
-  }
-`;
-
 const Admin = () => {
   const { data: medata } = useQuery(ME_QUERY);
   // console.log(medata);
@@ -49,8 +35,15 @@ const Admin = () => {
       medata && medata.me !== null ? (
         <Grid container spacing={4}>
           <Grid item sm={8} xs={12}>
-            <h1>Add Items</h1>
-            <AdminAddItem />
+            <h1>Deparment Items</h1>
+            <Button
+              color="secondary"
+              variant="contained"
+              component={Link}
+              to={`/items`}
+            >
+              Items
+            </Button>
           </Grid>
           <Grid item sm={4} xs={12}>
             <Profile data={medata.me} />
