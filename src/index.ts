@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser';
 import { getUserInfoFromToken } from './utils/jwt';
 import { MyContext } from './utils/misc';
 import { COOKIES_SECRET, COOKIE_TAG } from './constants';
-import path from 'path';
 import dotenv from 'dotenv';
 
 const main = async () => {
@@ -28,7 +27,6 @@ const main = async () => {
   const app = express();
 
   app.use(cookieParser(COOKIES_SECRET));
-  app.use(express.static(path.join(__dirname, 'client/build')));
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -47,10 +45,6 @@ const main = async () => {
       credentials: true,
       origin: 'http://localhost:3000'
     }
-  });
-
-  app.get('*', (_, res) => {
-    res.sendFile(path.join(__dirname, '/../client/build', 'index.html'));
   });
 
   app.listen(PORT, () => {
