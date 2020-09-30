@@ -122,7 +122,7 @@ const Adminregister = () => {
               id="username"
               name="username"
               type="text"
-              label="Username / Email"
+              label="Username "
               variant="outlined"
               fullWidth
               className={styles.textField}
