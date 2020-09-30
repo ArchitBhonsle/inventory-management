@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 
 //material ui
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { Grid, TextField, Button } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 //graphql
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from '@apollo/client';
 
 //styles
-import styles from "./adminregister.module.css";
+import styles from './adminregister.module.css';
 
 const REGISTER_MUTATION = gql`
   mutation register(
@@ -43,39 +40,31 @@ const REGISTER_MUTATION = gql`
 `;
 
 const Adminregister = () => {
-  const [form, setForm] = useState({
-    isAdmin: false,
-    firstname: "",
-    lastname: "",
-    image: "",
-    bio: "",
-    designation: "",
-    department: "",
-    email: "",
-    username: "",
-    password: "",
-  });
+  const formInitState = {
+    isAdmin     : false,
+    firstname   : '',
+    lastname    : '',
+    image       : '',
+    bio         : '',
+    designation : '',
+    department  : '',
+    email       : '',
+    username    : '',
+    password    : ''
+  };
+  const [ form, setForm ] = useState(formInitState);
 
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
-  const [runRegisterMutation, { data }] = useMutation(REGISTER_MUTATION);
+  const [ runRegisterMutation ] = useMutation(REGISTER_MUTATION);
 
   const onSubmit = (e) => {
     e.preventDefault();
     runRegisterMutation({
-      variables: form,
+      variables : form
     });
-
-    window.location = "/";
+    setForm(formInitState);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  let newimage = "";
+  let newimage = '';
   const convertImageToBase64 = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -87,7 +76,7 @@ const Adminregister = () => {
         console.log(newimage);
         setForm({
           ...form,
-          image: newimage,
+          image : newimage
         });
       };
     }
@@ -98,26 +87,20 @@ const Adminregister = () => {
       <Grid container className={styles.form}>
         <Grid item sm />
         <Grid item sm>
-          <Typography variant="h2" className={styles.pageTitle}>
-            Register
-          </Typography>
+          <h1>Add User</h1>
 
           <form noValidate>
-            <FormControl className={styles.formControl}>
-              <InputLabel>Is Admin</InputLabel>
-              <Select
-                label="Boolean"
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    isAdmin: e.target.value,
-                  })
-                }
-              >
-                <MenuItem value={false}>False</MenuItem>
-                <MenuItem value={true}>True</MenuItem>
-              </Select>
-            </FormControl>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={form.isAdmin}
+                  onChange={() => setForm({ ...form, isAdmin: !form.isAdmin })}
+                  name="isAdmin"
+                  color="primary"
+                />
+              }
+              label="Is the user to be created an admin?"
+            />
             <TextField
               id="username"
               name="username"
@@ -130,9 +113,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  username: e.target.value,
-                })
-              }
+                  username : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="email"
@@ -146,9 +129,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  email: e.target.value,
-                })
-              }
+                  email : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="firstname"
@@ -162,9 +145,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  firstname: e.target.value,
-                })
-              }
+                  firstname : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="lastname"
@@ -178,9 +161,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  lastname: e.target.value,
-                })
-              }
+                  lastname : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="password"
@@ -194,9 +177,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  password: e.target.value,
-                })
-              }
+                  password : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="department"
@@ -210,9 +193,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  department: e.target.value,
-                })
-              }
+                  department : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="designation"
@@ -226,9 +209,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  designation: e.target.value,
-                })
-              }
+                  designation : e.target.value
+                })}
+              margin="normal"
             />
             <TextField
               id="bio"
@@ -242,9 +225,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  bio: e.target.value,
-                })
-              }
+                  bio : e.target.value
+                })}
+              margin="normal"
             />
             <div>
               <input
@@ -256,7 +239,12 @@ const Adminregister = () => {
                 onChange={(e) => convertImageToBase64(e)}
               />
               <label htmlFor="image">
-                <Button variant="outlined" color="secondary" component="span">
+                <Button
+                  className={styles.button}
+                  variant="outlined"
+                  color="secondary"
+                  component="span"
+                >
                   Upload Image
                 </Button>
               </label>

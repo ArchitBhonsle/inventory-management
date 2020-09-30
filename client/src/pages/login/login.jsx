@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 //material ui
-import { Grid, Typography, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button } from '@material-ui/core';
 
 //styles
 import styles from './login.module.css';
@@ -60,9 +60,6 @@ const Login = () => {
       <Grid container className={styles.form}>
         <Grid item sm />
         <Grid item sm>
-          <Typography variant="h2" className={styles.pageTitle}>
-            Login
-          </Typography>
           <form noValidate>
             <TextField
               id="username"
@@ -71,7 +68,6 @@ const Login = () => {
               label="Username / Email"
               variant="outlined"
               fullWidth
-              className={styles.textField}
               value={form.usernameOrEmail}
               helperText={error.errors}
               error={error.errors ? true : false}
@@ -80,6 +76,7 @@ const Login = () => {
                   ...form,
                   usernameOrEmail : e.target.value
                 })}
+              margin="normal"
             />
             <TextField
               id="password"
@@ -88,18 +85,19 @@ const Login = () => {
               label="Password"
               variant="outlined"
               fullWidth
-              className={styles.textField}
               value={form.password}
               helperText={error.errors}
               error={error.errors ? true : false}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              margin="normal"
             />
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              className={styles.button}
+              size="large"
               onClick={onSubmit}
+              margin="1rem"
             >
               Login
             </Button>
