@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 //material ui
@@ -28,13 +28,11 @@ const ME_QUERY = gql`
 `;
 
 const MEITEMS_QUERY = gql`
-  query getUsersItems($uoe: String!) {
-    getUsersItems(usernameOrEmail: $uoe) {
+  query {
+    myItems {
       id
       name
       department
-
-      location
       image
     }
   }
@@ -42,25 +40,23 @@ const MEITEMS_QUERY = gql`
 
 const Home = () => {
   const { data: medata } = useQuery(ME_QUERY);
-  const uoe = medata?.me?.username;
-  const { data: itemdata } = useQuery(MEITEMS_QUERY, {
-    skip: !uoe,
-    variables: { uoe },
-  });
+  // const uoe = medata?.me?.username;
+  const { data: itemdata } = useQuery(MEITEMS_QUERY);
 
   let list = null;
 
-  if (
-    itemdata &&
-    itemdata.getUsersItems &&
-    medata !== undefined &&
-    medata.me !== null
-  ) {
-    list = itemdata.getUsersItems.map((obj) => {
-      console.log(obj);
+  if (itemdata && itemdata.myItems) {
+    list = itemdata.myItems.map((obj) => {
+      // console.log(obj);
       return <TotalViewItem key={obj.id} data={obj} />;
     });
   }
+
+  useEffect(() => {
+    if (itemdata) {
+      console.log(itemdata);
+    }
+  }, []);
 
   let render = null;
 
