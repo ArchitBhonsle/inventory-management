@@ -28,6 +28,7 @@ const main = async () => {
   const app = express();
 
   app.use(cookieParser(COOKIES_SECRET));
+  app.use(express.static(path.join(__dirname, 'client/build')));
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -48,12 +49,9 @@ const main = async () => {
     }
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'client/build')));
-    app.get('*', (_, res) => {
-      res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-    });
-  }
+  app.get('*', (_, res) => {
+    res.sendFile(path.join(__dirname, '/../client/build', 'index.html'));
+  });
 
   app.listen(PORT, () => {
     console.log('🚀 at http://localhost:4000/graphql');
