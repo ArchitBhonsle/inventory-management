@@ -93,9 +93,9 @@ const Items = () => {
             value={category}
           >
             <MenuItem value="">None</MenuItem>
-            <MenuItem value="item1">u</MenuItem>
-            <MenuItem value="v">v</MenuItem>
-            <MenuItem value="w">w</MenuItem>
+            <MenuItem value="arms">Arms</MenuItem>
+            <MenuItem value="clothing">Clothing</MenuItem>
+            <MenuItem value="evidence">Evidence</MenuItem>
           </Select>
         </FormControl>
       </Typography>
