@@ -57,7 +57,7 @@ const Home = () => {
     medata.me !== null
   ) {
     list = itemdata.getUsersItems.map((obj) => {
-      // console.log(obj);
+      console.log(obj);
       return <TotalViewItem key={obj.id} data={obj} />;
     });
   }
@@ -69,7 +69,6 @@ const Home = () => {
       <Grid container spacing={4}>
         <Grid item sm={8} xs={12}>
           <h1>Current Items</h1>
-
           {list}
         </Grid>
         <Grid item sm={4} xs={12}>

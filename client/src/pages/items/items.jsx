@@ -65,16 +65,6 @@ const Items = () => {
     }
   }, [category, department, runItemsQuery]);
 
-  const [runCatQuery, { data: catlist }] = useLazyQuery(CAT_QUERY);
-
-  useEffect(() => {
-    if (department) {
-      runCatQuery({
-        variables: { department },
-      });
-    }
-  }, [department, runCatQuery]);
-
   useEffect(() => {
     if (data && data.getItemsByDepartmentAndCategory) {
       setItems(
