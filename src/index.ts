@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-import "reflect-metadata";
-import mongoose from "mongoose";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/user";
-import { ItemResolver } from "./resolvers/item";
-import cookieParser from "cookie-parser";
-import { getUserInfoFromToken } from "./utils/jwt";
-import { MyContext } from "./utils/misc";
-import { COOKIES_SECRET, COOKIE_TAG } from "./constants";
-import path from "path";
-import dotenv from "dotenv";
-=======
 import 'reflect-metadata';
 import mongoose from 'mongoose';
 import express from 'express';
@@ -25,13 +10,12 @@ import { getUserInfoFromToken } from './utils/jwt';
 import { MyContext } from './utils/misc';
 import { COOKIES_SECRET, COOKIE_TAG } from './constants';
 import dotenv from 'dotenv';
->>>>>>> 4a7fa9d60b1229b03be8f33628d5d54fc6ff382e
 
 const main = async () => {
   dotenv.config();
 
-  const MONGO =
-    "mongodb+srv://puipuituipui:chingchangtomato@main.kuypu.mongodb.net/inventory-management?retryWrites=true&w=majority";
+  const MONGO = String(process.env.MONGO)
+    
   const PORT = Number(process.env.PORT) || 4000;
 
   await mongoose.connect(String(MONGO), {
