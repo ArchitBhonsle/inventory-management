@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 //material ui
-import { Grid, TextField, Button } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import { Grid, TextField, Button } from "@material-ui/core";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 //graphql
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from "@apollo/client";
 
 //styles
-import styles from './adminregister.module.css';
+import styles from "./adminregister.module.css";
 
 const REGISTER_MUTATION = gql`
   mutation register(
@@ -41,30 +41,31 @@ const REGISTER_MUTATION = gql`
 
 const Adminregister = () => {
   const formInitState = {
-    isAdmin     : false,
-    firstname   : '',
-    lastname    : '',
-    image       : '',
-    bio         : '',
-    designation : '',
-    department  : '',
-    email       : '',
-    username    : '',
-    password    : ''
+    isAdmin: false,
+    firstname: "",
+    lastname: "",
+    image: "",
+    bio: "",
+    designation: "",
+    department: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmpassword: "",
   };
-  const [ form, setForm ] = useState(formInitState);
+  const [form, setForm] = useState(formInitState);
 
-  const [ runRegisterMutation ] = useMutation(REGISTER_MUTATION);
+  const [runRegisterMutation] = useMutation(REGISTER_MUTATION);
 
   const onSubmit = (e) => {
     e.preventDefault();
     runRegisterMutation({
-      variables : form
+      variables: form,
     });
     setForm(formInitState);
   };
 
-  let newimage = '';
+  let newimage = "";
   const convertImageToBase64 = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -76,9 +77,29 @@ const Adminregister = () => {
         console.log(newimage);
         setForm({
           ...form,
-          image : newimage
+          image: newimage,
         });
       };
+    }
+  };
+
+  const [error, setError] = useState({
+    errors: null,
+  });
+
+  const matchpassword = (e) => {
+    if (e.target.value !== form.password) {
+      setError({
+        errors: "Password does not match",
+      });
+    } else {
+      setError({
+        errors: null,
+      });
+      setForm({
+        ...form,
+        confirmpassword: "",
+      });
     }
   };
 
@@ -113,8 +134,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  username : e.target.value
-                })}
+                  username: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -129,8 +151,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  email : e.target.value
-                })}
+                  email: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -145,8 +168,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  firstname : e.target.value
-                })}
+                  firstname: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -161,8 +185,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  lastname : e.target.value
-                })}
+                  lastname: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -177,8 +202,22 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  password : e.target.value
-                })}
+                  password: e.target.value,
+                })
+              }
+              margin="normal"
+            />
+            <TextField
+              id="confirmpassword"
+              name="confirmpassword"
+              type="password"
+              label="Confirm Password"
+              variant="outlined"
+              fullWidth
+              className={styles.textField}
+              onChange={(e) => matchpassword(e)}
+              helperText={error.errors}
+              error={error.errors ? true : false}
               margin="normal"
             />
             <TextField
@@ -193,8 +232,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  department : e.target.value
-                })}
+                  department: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -209,8 +249,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  designation : e.target.value
-                })}
+                  designation: e.target.value,
+                })
+              }
               margin="normal"
             />
             <TextField
@@ -225,8 +266,9 @@ const Adminregister = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  bio : e.target.value
-                })}
+                  bio: e.target.value,
+                })
+              }
               margin="normal"
             />
             <div>
