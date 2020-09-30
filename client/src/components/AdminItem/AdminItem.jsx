@@ -22,14 +22,14 @@ const AdminItem = ({
           <Typography gutterBottom variant="h5" component="h2">
             {name}
           </Typography>
+          <Typography variant="body2" color="textPrimary" component="p">
+            {id}
+          </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {location}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {department}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            ID #{id}
           </Typography>
         </CardContent>
       </CardActionArea>

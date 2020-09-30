@@ -9,6 +9,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 
 //graphql
 import { gql, useMutation } from '@apollo/client';
@@ -34,12 +39,14 @@ const ITEMADD_MUTATION = gql`
   }
 `;
 
+const categories = [ 'arms', 'ammunition', 'files', 'uniforms' ];
+
 const AdminAddItem = () => {
   const [ form, setForm ] = useState({
     name  : '',
     desc  : '',
     loc   : '',
-    cat   : '',
+    cat   : 'arms',
     image : ''
   });
 
@@ -92,7 +99,7 @@ const AdminAddItem = () => {
     >
       <AddIcon onClick={handleClickOpen} />
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>Add your post</DialogTitle>
+        <DialogTitle>Add item</DialogTitle>
         <DialogContent>
           <form noValidate>
             <TextField
@@ -137,20 +144,28 @@ const AdminAddItem = () => {
               row="3"
               fullWidth
             />
-            <TextField
-              name="category"
-              type="text"
-              label="category"
-              value={form.cat}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  cat : e.target.value
-                })}
-              multiline
-              row="3"
-              fullWidth
-            />
+
+            <Typography
+              variant="h3"
+              color="textSecondary"
+              className={styles.header}
+            >
+              <FormControl className={styles.formControl}>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  label="Category"
+                  onChange={(e) => {
+                    setForm({ ...form, cat: e.target.value });
+                  }}
+                  value={form.cat}
+                >
+                  <MenuItem value="">all</MenuItem>
+                  {categories.map((cate) => (
+                    <MenuItem value={cate}>{cate}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Typography>
 
             <input
               id="image"
