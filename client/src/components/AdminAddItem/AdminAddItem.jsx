@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 //material ui
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 //graphql
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from "@apollo/client";
 
 //styles
-import styles from './AdminAddItem';
+import styles from "./AdminAddItem";
 
 const ITEMADD_MUTATION = gql`
   mutation createItem(
@@ -35,17 +35,17 @@ const ITEMADD_MUTATION = gql`
 `;
 
 const AdminAddItem = () => {
-  const [ form, setForm ] = useState({
-    name  : '',
-    desc  : '',
-    loc   : '',
-    cat   : '',
-    image : ''
+  const [form, setForm] = useState({
+    name: "",
+    desc: "",
+    loc: "",
+    cat: "",
+    image: "",
   });
 
-  const [ runItemAddMutation ] = useMutation(ITEMADD_MUTATION);
+  const [runItemAddMutation] = useMutation(ITEMADD_MUTATION);
 
-  const [ open, setOpen ] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,13 +59,15 @@ const AdminAddItem = () => {
     e.preventDefault();
 
     runItemAddMutation({
-      variables : form
+      variables: form,
     });
 
     handleClose();
+
+    window.location = "/items";
   };
 
-  let newimage = '';
+  let newimage = "";
   const convertImageToBase64 = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -77,7 +79,7 @@ const AdminAddItem = () => {
         console.log(newimage);
         setForm({
           ...form,
-          image : newimage
+          image: newimage,
         });
       };
     }
@@ -104,8 +106,9 @@ const AdminAddItem = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  name : e.target.value
-                })}
+                  name: e.target.value,
+                })
+              }
               row="3"
               fullWidth
             />
@@ -117,8 +120,9 @@ const AdminAddItem = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  desc : e.target.value
-                })}
+                  desc: e.target.value,
+                })
+              }
               multiline
               row="3"
               fullWidth
@@ -131,8 +135,9 @@ const AdminAddItem = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  loc : e.target.value
-                })}
+                  loc: e.target.value,
+                })
+              }
               multiline
               row="3"
               fullWidth
@@ -145,8 +150,9 @@ const AdminAddItem = () => {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  cat : e.target.value
-                })}
+                  cat: e.target.value,
+                })
+              }
               multiline
               row="3"
               fullWidth
@@ -155,7 +161,7 @@ const AdminAddItem = () => {
             <input
               id="image"
               accept="image/*"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               multiple
               type="file"
               onChange={(e) => convertImageToBase64(e)}

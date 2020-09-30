@@ -26,39 +26,39 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     dotenv_1.default.config();
-    const MONGO = String(process.env.MONGO);
+    const MONGO = "mongodb+srv://puipuituipui:chingchangtomato@main.kuypu.mongodb.net/inventory-management?retryWrites=true&w=majority";
     const PORT = Number(process.env.PORT) || 4000;
     yield mongoose_1.default.connect(String(MONGO), {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: false
+        useFindAndModify: false,
     });
     const app = express_1.default();
     app.use(cookie_parser_1.default(constants_1.COOKIES_SECRET));
-    app.use(express_1.default.static(path_1.default.join(__dirname, 'client/build')));
+    app.use(express_1.default.static(path_1.default.join(__dirname, "client/build")));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
-            resolvers: [user_1.UserResolver, item_1.ItemResolver]
+            resolvers: [user_1.UserResolver, item_1.ItemResolver],
         }),
         context: ({ req, res }) => __awaiter(void 0, void 0, void 0, function* () {
             const token = req.signedCookies[constants_1.COOKIE_TAG];
             const userInfo = jwt_1.getUserInfoFromToken(token);
             return { userInfo, req, res };
-        })
+        }),
     });
     apolloServer.applyMiddleware({
         app,
         cors: {
             credentials: true,
-            origin: 'http://localhost:3000'
-        }
+            origin: "http://localhost:3000",
+        },
     });
-    app.get('*', (_, res) => {
-        res.sendFile(path_1.default.join(__dirname, '/../client/build', 'index.html'));
+    app.get("*", (_, res) => {
+        res.sendFile(path_1.default.join(__dirname, "/../client/build", "index.html"));
     });
     app.listen(PORT, () => {
-        console.log('🚀 at http://localhost:4000/graphql');
+        console.log("🚀 at http://localhost:4000/graphql");
     });
 });
 main();
