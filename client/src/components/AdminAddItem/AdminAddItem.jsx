@@ -70,6 +70,8 @@ const AdminAddItem = () => {
     });
 
     handleClose();
+
+    window.location = '/items';
   };
 
   let newimage = '';
