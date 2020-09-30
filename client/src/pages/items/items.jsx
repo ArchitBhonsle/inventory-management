@@ -30,14 +30,6 @@ const ME_QUERY = gql`
   }
 `;
 
-const CAT_QUERY = gql`
-  query getItemsByDepartment($department: String!) {
-    getItemsByDepartment(department: $department) {
-      category
-    }
-  }
-`;
-
 const ITEMS_QUERY = gql`
   query getItemsByDepartmentAndCategory(
     $category: String!
@@ -93,24 +85,6 @@ const Items = () => {
     }
   }, [data]);
 
-  var categoryItemSet = new Set();
-
-  let categoryItems = null;
-
-  useEffect(() => {
-    if (catlist && catlist.getItemsByDepartment) {
-      catlist.getItemsByDepartment.map((item, ind) => {
-        categoryItemSet.add(item.category);
-      });
-    }
-
-    const categoryItemsArray = Array.from(categoryItemSet);
-
-    categoryItems = categoryItemsArray.map((item) => {
-      return <MenuItem value={item}>{item}</MenuItem>;
-    });
-  }, [catlist]);
-
   return (
     <Fragment>
       <div className={styles.additems}>
@@ -132,7 +106,6 @@ const Items = () => {
             <MenuItem value="item1">u</MenuItem>
             <MenuItem value="v">v</MenuItem>
             <MenuItem value="w">w</MenuItem>
-            {categoryItems}
           </Select>
         </FormControl>
       </Typography>
