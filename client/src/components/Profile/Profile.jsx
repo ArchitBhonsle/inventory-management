@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 //material ui
 import { Paper, Typography } from '@material-ui/core';

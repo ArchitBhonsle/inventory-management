@@ -13,6 +13,11 @@ import styles from './Navbar.module.css';
 const ME_QUERY = gql`
   query {
     me {
+      username
+      items
+      bio
+      department
+      image
       isAdmin
     }
   }

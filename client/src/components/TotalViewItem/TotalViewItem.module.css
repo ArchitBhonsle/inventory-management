@@ -1,9 +1,4 @@
 .media {
-  height: 300px;
-  width: 300px;
-}
-
-.root {
-  max-width: 300px;
-  margin: 50px;
+  width: 200px;
+  height: 200px;
 }

@@ -35,6 +35,8 @@ const ITEM_QUERY = gql`
       name
       id
       location
+      description
+      department
       history {
         name
         isDepartment
@@ -92,6 +94,7 @@ const Totalview = (props) => {
 
   return (
     <Fragment>
+      <h1>Item</h1>
       <div className={styles.transfer}>
         <TextField
           id="transferuser"
@@ -110,10 +113,13 @@ const Totalview = (props) => {
           Transfer
         </Button>
       </div>
-      <h1>Item</h1>
-      {itemtot}
-      <h1>Item History</h1>
-      {hisitems}
+      <div class={styles.content}>
+        {itemtot}
+        <div>
+          <h1>History</h1>
+          {hisitems}
+        </div>
+      </div>
     </Fragment>
   );
 };

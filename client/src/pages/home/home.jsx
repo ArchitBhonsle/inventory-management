@@ -23,11 +23,12 @@ const ME_QUERY = gql`
       bio
       department
       image
+      isAdmin
     }
   }
 `;
 
-const MEITEMS_QUERY = gql`
+const MY_ITEMS_QUERY = gql`
   query {
     myItems {
       id
@@ -41,7 +42,7 @@ const MEITEMS_QUERY = gql`
 const Home = () => {
   const { data: medata } = useQuery(ME_QUERY);
   // const uoe = medata?.me?.username;
-  const { data: itemData } = useQuery(MEITEMS_QUERY);
+  const { data: itemData } = useQuery(MY_ITEMS_QUERY);
 
   let list = null;
 
