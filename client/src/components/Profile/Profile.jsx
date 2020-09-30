@@ -1,42 +1,18 @@
-import React, { useEffect, Fragment } from "react";
-import { useHistory } from "react-router-dom";
+import React, { Fragment } from 'react';
 
 //material ui
-import { Paper, Typography, Tooltip, IconButton } from "@material-ui/core";
+import { Paper, Typography } from '@material-ui/core';
 
 //dumb way to get link
-import MuiLink from "@material-ui/core/Link";
+import MuiLink from '@material-ui/core/Link';
 
 //icons
-import { LocationOn, ExitToApp } from "@material-ui/icons";
-
-//graphql
-import { gql, useMutation } from "@apollo/client";
+import { LocationOn } from '@material-ui/icons';
 
 //styles
-import styles from "./Profile.module.css";
-
-const LOGOUT_MUTATION = gql`
-  mutation logout {
-    logout
-  }
-`;
+import styles from './Profile.module.css';
 
 const Profile = ({ data: { username, bio, department, image } }) => {
-  const [logout, { data, client }] = useMutation(LOGOUT_MUTATION);
-  const history = useHistory();
-
-  useEffect(() => {
-    if (data) {
-      if (data.logout === "logged out") {
-        client.clearStore();
-        history.push("/");
-      } else if (data.logout === "unknown error please try again") {
-        // handle error
-      }
-    }
-  }, [data, client, history]);
-
   return (
     <Paper className={styles.paper}>
       <div className={styles.profile}>
@@ -49,22 +25,11 @@ const Profile = ({ data: { username, bio, department, image } }) => {
             {username}
           </MuiLink>
           <hr />
-
-          <Fragment>
-            <Typography variant="body2">{bio}</Typography>
-            <hr />
-          </Fragment>
-
-          <Fragment>
-            <LocationOn color="primary" /> <span>{department}</span>
-            <hr />
-          </Fragment>
+          <Typography variant="body2">{bio}</Typography>
+          <hr />
+          <LocationOn color="primary" /> <span>{department}</span>
+          <hr />
         </div>
-        <Tooltip title="Logout" placement="right">
-          <IconButton onClick={logout}>
-            <ExitToApp color="primary" />
-          </IconButton>
-        </Tooltip>
       </div>
     </Paper>
   );

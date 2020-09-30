@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 //material ui
-import { Button, Grid, Paper } from "@material-ui/core";
+import { Button, Grid, Paper } from '@material-ui/core';
 
 //components
-import Profile from "../../components/Profile/Profile";
+import Profile from '../../components/Profile/Profile';
 
-import TotalViewItem from "../../components/TotalViewItem/TotalViewItem";
+import TotalViewItem from '../../components/TotalViewItem/TotalViewItem';
 
 //graphql
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery } from '@apollo/client';
 
 //styles
-import styles from "./home.module.css";
+import styles from './home.module.css';
 
 const ME_QUERY = gql`
   query {
@@ -41,22 +41,25 @@ const MEITEMS_QUERY = gql`
 const Home = () => {
   const { data: medata } = useQuery(ME_QUERY);
   // const uoe = medata?.me?.username;
-  const { data: itemdata } = useQuery(MEITEMS_QUERY);
+  const { data: itemData } = useQuery(MEITEMS_QUERY);
 
   let list = null;
 
-  if (itemdata && itemdata.myItems) {
-    list = itemdata.myItems.map((obj) => {
+  if (itemData && itemData.myItems) {
+    list = itemData.myItems.map((obj) => {
       // console.log(obj);
       return <TotalViewItem key={obj.id} data={obj} />;
     });
   }
 
-  useEffect(() => {
-    if (itemdata) {
-      console.log(itemdata);
-    }
-  }, []);
+  useEffect(
+    () => {
+      if (itemData) {
+        console.log(itemData);
+      }
+    },
+    [ itemData ]
+  );
 
   let render = null;
 
