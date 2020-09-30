@@ -9,12 +9,16 @@ import cookieParser from 'cookie-parser';
 import { getUserInfoFromToken } from './utils/jwt';
 import { MyContext } from './utils/misc';
 import { COOKIES_SECRET, COOKIE_TAG } from './constants';
+import path from 'path';
 import dotenv from 'dotenv';
 
 const main = async () => {
   dotenv.config();
 
-  await mongoose.connect(String(process.env.MONGO), {
+  const MONGO = String(process.env.MONGO);
+  const PORT = Number(process.env.PORT) || 4000;
+
+  await mongoose.connect(String(MONGO), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -44,7 +48,14 @@ const main = async () => {
     }
   });
 
-  app.listen(4000, () => {
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.get('*', (_, res) => {
+      res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+  }
+
+  app.listen(PORT, () => {
     console.log('🚀 at http://localhost:4000/graphql');
   });
 };
